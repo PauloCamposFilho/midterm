@@ -12,7 +12,7 @@
 * GET /maps/:id
 * POST /maps
 * PATCH /maps/:id
-DELETE /maps/:id
+* DELETE /maps/:id
 
 ## Pins
 * GET /pins/:map_id

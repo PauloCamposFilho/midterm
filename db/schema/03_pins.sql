@@ -1,0 +1,13 @@
+
+-- Drop and recreate Pins table
+
+DROP TABLE IF EXISTS pins CASCADE;
+CREATE TABLE pins (
+  id SERIAL PRIMARY KEY NOT NULL,
+  map_id INTEGER REFERENCES maps(id) ON DELETE CASCADE,
+  latitude DOUBLE PRECISION NOT NULL,
+  longitude DOUBLE PRECISION NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  image VARCHAR(255)
+);

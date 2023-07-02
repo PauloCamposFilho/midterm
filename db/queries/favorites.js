@@ -44,7 +44,7 @@ const getFavoriteCountForMap = function(mapId) {
 const getFavoriteCountForUser = function(userId) {
   return db
     .query(`
-    SELECT count(favourites.*)
+    SELECT count(favorites.*)
     FROM favorites
     JOIN users ON favorites.user_id = users.id
     JOIN maps on favorites.map_id = maps.id
@@ -66,7 +66,10 @@ const getMostFavorited = function(userId) {
     FROM favorites
     JOIN maps ON favorites.map_id = maps.id
     JOIN users ON favorites.user_id = users.id
-    WHERE faovrites.user_id = $1
+    WHERE maps.user_id = $1
+    GROUP BY maps.id
+    ORDER BY count(favorites.*) DESC
+    LIMIT 1
     `, [userId])
     .then((result) => {
       return result.rows[0];

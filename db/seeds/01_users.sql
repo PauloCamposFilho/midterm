@@ -9,4 +9,4 @@ VALUES
   ('David Anderson', 'stu@gmail.com', 'password', NULL),
   ('Jessica Martinez', 'vwx@gmail.com', 'password', NULL),
   ('James Taylor', 'yz1@gmail.com', 'password', NULL),
-  ('Laura Hernandez', 'lmn@gmail.com', 'password', NULL);
+  ('Laura Hernandez', 'lmn@gmail.com', 'password', NULL),

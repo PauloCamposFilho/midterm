@@ -1,32 +1,29 @@
 const db = require('../connection');
 
-
-///////////////////////////////
-////        SELECT         ////
-///////////////////////////////
-
-// for use with user login
-const getUserWithEmail = function(email) {
+// fetch a map given its id
+const getMapWithID = function(mapId) {
   return db
     .query(`
     SELECT *
-    FROM users
-    WHERE email = $1
-    `, [email])
+    FROM maps
+    WHERE id = $1
+    `, [mapId])
     .then((result) => {
-      return (result.rows[0]);
+      return result.rows[0];
     })
     .catch((err) => {
       console.log(err.message);
     });
 };
 
-// for use with cookies to fetch user info for profile rendering
-const getUserWithId = function(userId) {
+// fetch all maps made by a given user
+const getMapsFromUser = function(userId) {
   return db
     .query(`
-    SELECT * FROM users
-    WHERE id = $1
+    SELECT maps.*
+    FROM maps
+    JOIN users ON user_id = users.id
+    WHERE user_id = $1
     `, [userId])
     .then((result) => {
       return result.rows[0];
@@ -41,23 +38,23 @@ const getUserWithId = function(userId) {
 ////        INSERT         ////
 ///////////////////////////////
 
-// insert a new user
-const addUser = function(user) {
+// insert new pin
+const addMap = function(map) {
   const queryString = `
-  INSERT INTO users (
-    username,
-    email,
-    password,
-    profile_picture
+  INSERT INTO pins (
+    user_id,
+    title,
+    description,
+    last_edit
   )
   VALUES ($1, $2, $3, $4)
   RETURNING *
   `;
   const values = [
-    user["username"],
-    user["email"],
-    user["password"],
-    user["profile_picture"],
+    map["user_id"],
+    map["title"],
+    map["description"],
+    map["last_edit"],
   ];
   return db
     .query(queryString, values)
@@ -69,4 +66,4 @@ const addUser = function(user) {
     });
 };
 
-module.exports = { getUserWithEmail, getUserWithId, addUser };
+module.exports = { getMapWithID, getMapsFromUser, addMap };

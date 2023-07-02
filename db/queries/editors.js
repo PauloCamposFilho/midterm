@@ -1,5 +1,10 @@
 const db = require('../connection');
 
+
+///////////////////////////////
+////        SELECT         ////
+///////////////////////////////
+
 // fetch all users with edit permissions for a given map
 const getAllEditorsForMap = function(mapId) {
   return db

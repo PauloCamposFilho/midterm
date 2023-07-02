@@ -1,5 +1,10 @@
 const db = require('../connection');
 
+
+///////////////////////////////
+////        SELECT         ////
+///////////////////////////////
+
 // fetch all of a user's favorite maps
 const getAllFavoritesForUser = function(userId) {
   return db

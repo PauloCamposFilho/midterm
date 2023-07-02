@@ -1,5 +1,10 @@
 const db = require('../connection');
 
+
+///////////////////////////////
+////        SELECT         ////
+///////////////////////////////
+
 // fetch a map given its id
 const getMapWithID = function(mapId) {
   return db

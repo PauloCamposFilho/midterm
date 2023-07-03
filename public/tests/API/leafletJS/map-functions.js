@@ -33,7 +33,8 @@ const onMarkerClickHandler = (e) => {
 };
 
 const onMarkerRightClickHandler = (e) => {
-  this.remove();
+  const _marker = e.target;
+  _marker.remove();
 };
 
 

@@ -69,4 +69,52 @@ const addUser = function(user) {
     });
 };
 
-module.exports = { getUserWithEmail, getUserWithId, addUser };
+
+///////////////////////////////
+////        UPDATE         ////
+///////////////////////////////
+
+const updateUser = function (userId, updates) {
+  const values = [];
+  const parameterizedStrings = [];
+  let queryString = `
+  UPDATE users
+  SET `;
+  for (const column in updates) {
+    values.push(column, updates[column]);
+    parameterizedStrings.push(`$${values.length - 1} = $${values.length}, `);
+  }
+  values.push(userId);
+  queryString += `${parameterizedStrings.join(', ')}
+  WHERE id = $${values.length}
+  `;
+  return db
+    .query(queryString, values)
+    .then((result) => {
+      return result.rowCount > 0;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+
+///////////////////////////////
+////        DELETE         ////
+///////////////////////////////
+
+const deleteUser = function(userId) {
+  return db
+    .query(`
+    DELETE FROM users WHERE id = $1
+    `, [userId])
+    .then((result) => {
+      return result.rowCount > 0;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+
+module.exports = { getUserWithEmail, getUserWithId, addUser, updateUser, deleteUser };

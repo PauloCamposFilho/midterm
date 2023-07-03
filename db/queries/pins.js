@@ -10,9 +10,8 @@ const getAllPinsForMap = function(mapId) {
   return db
     .query(`
     SELECT *
-    FROM pins
-    JOIN maps ON map_id = maps.id
-    WHERE maps.id = $1
+    FROM pins    
+    WHERE map_id = $1
     `, [mapId])
     .then((result) => {
       return result.rows;

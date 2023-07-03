@@ -31,12 +31,12 @@ app.use(express.static('public'));
 const queries = require('./db/queries');
 
 // Resource Routes
-const usersRoutes = require('./routes/users')(queries);
-const mapsRoutes = require('./routes/maps')(queries);
-const pinsRoutes = require('./routes/pins')(queries);
-const favoritesRoutes = require('./routes/favorites')(queries);
-const editorsRoutes = require('./routes/editors')(queries);
-const registerRoutes = require('./routes/register')(queries);
+const usersRoutes = require('./routes/users');
+const mapsRoutes = require('./routes/maps');
+const pinsRoutes = require('./routes/pins');
+const favoritesRoutes = require('./routes/favorites');
+const editorsRoutes = require('./routes/editors');
+const registerRoutes = require('./routes/register');
 
 // Mount all resource routes
 app.use('/users', usersRoutes);

@@ -61,40 +61,9 @@ const getAllMarkers = (map) => {
   return allMarkers;
 };
 
-const buildMap = (position, mapId) => {
-  let latitude;
-  let longitude;
-  if (!mapId) {
-    // Retrieve latitude and longitude
-    if (position.coords) { // geolocation OK
-      latitude = position.coords.latitude;
-      longitude = position.coords.longitude;
-    } else { // somewhere in Burnaby
-      latitude = 49.262176;
-      longitude = -122.946625;
-    }
-  }
-  
-  // Create a map centered at the current position
-  let _mapId = mapId || -1;
-  _map = L.map('map').setView([latitude, longitude], 15); // Adjust the zoom level as needed
-  _map._appId = _mapId;
-
-  // Add a tile layer
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; OpenStreetMap contributors',
-    maxZoom: 18
-  }).addTo(_map);
-
-  // test: map has predefined pins.
-  
-  renderPinsToMap(JSON.stringify(pinsTest), _map);
-
-  // add event
-  _map.on('click', onMapClick);
-};
 const initMap = () => {
-  const mapId = $("#map").data("mapId");
+  const mapId = $("#map").attr("data-mapId");
+  console.log('mapId', mapId);
   if (mapId) {
     return buildMap(null, mapId);
   }
@@ -108,15 +77,55 @@ const initMap = () => {
   }
 };
 
+const buildMap = async (position, mapId) => {
+  let latitude;
+  let longitude;
+  let zoom = 15;
+  let _info;
+  if (!mapId) {
+    // Retrieve latitude and longitude
+    if (position.coords) { // geolocation OK
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+    } else { // somewhere in Burnaby
+      latitude = 49.262176;
+      longitude = -122.946625;
+    }
+  } else { // lets get the map info!
+    _info = await db_helpers.getMapInfo(mapId);
+    console.log(_info);
+    latitude = _info.mapInfo.latitude;
+    longitude = _info.mapInfo.longitude;
+    zoom = _info.mapInfo.zoom;    
+  }
+  
+  // Create a map centered at the current position
+  let _mapId = mapId || -1;
+  _map = L.map('map').setView([latitude, longitude], zoom); // Adjust the zoom level as needed
+  _map._appId = _mapId;
+
+  // Add a tile layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; OpenStreetMap contributors',
+    maxZoom: 18
+  }).addTo(_map);
+
+  // test: map has predefined pins.
+  
+  renderPinsToMap(_info.pinInfo, _map);
+
+  // add event
+  _map.on('click', onMapClick);
+};
+
 // function is called after database-functions.js getPinsForMap
-const renderPinsToMap = (JSONPins, mapObj) => {
-  const _pins = JSON.parse(JSONPins);
-  if (!Array.isArray(_pins) || _pins.length === 0) {
+const renderPinsToMap = (pinsObj, mapObj) => {  
+  if (!Array.isArray(pinsObj) || pinsObj.length === 0) {
     return;
   }
-  for (const pin of _pins) {
+  for (const pin of pinsObj) {
     // create L.Marker object
-    let marker = new L.Marker([pin.Lat, pin.Lon], {draggable:true});
+    let marker = new L.Marker([pin.latitude, pin.longitude], {draggable:true});
     // set custom properties
     marker._title = pin.title;
     marker._description = pin.description;
@@ -127,4 +136,3 @@ const renderPinsToMap = (JSONPins, mapObj) => {
     marker.on('contextmenu', onMarkerRightClickHandler);
   }
 };
-

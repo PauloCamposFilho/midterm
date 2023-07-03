@@ -108,6 +108,7 @@ const initMap = () => {
   }
 };
 
+// function is called after database-functions.js getPinsForMap
 const renderPinsToMap = (JSONPins, mapObj) => {
   const _pins = JSON.parse(JSONPins);
   if (!Array.isArray(_pins) || _pins.length === 0) {

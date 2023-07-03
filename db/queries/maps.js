@@ -21,15 +21,57 @@ const getMapWithID = function(mapId) {
     });
 };
 
-// fetch all maps made by a given user
-const getMapsFromUser = function(userId) {
+// fetch all maps made by a given user, with optional limit
+const getMapsFromUser = function(userId, limit) {
+  const queryParams = [];
+  queryParams.push(userId);
+  let queryString = `
+  SELECT maps.*
+  FROM maps
+  JOIN users ON user_id = users.id
+  WHERE user_id = $1
+  `;
+  if (limit) {
+    queryParams.push(limit);
+    queryString += `LIMIT $${queryParams.length}`;
+  }
+  queryString += `
+  ORDER BY last_edit DESC`;
   return db
-    .query(`
-    SELECT maps.*
-    FROM maps
-    JOIN users ON user_id = users.id
-    WHERE user_id = $1
-    `, [userId])
+    .query(queryString, [userId])
+    .then((result) => {
+      return result.rows[0];
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+// Fetch most favorited maps, optionally filtered by a particular user. Limit can be specified, default is 5
+const getTopMaps = function (userId, limit) {
+  const queryParams = [];
+  let queryString = `
+  SELECT maps.*, count(favorites.*)
+  FROM favorites
+  JOIN maps ON favorites.map_id = maps.id
+  JOIN users ON favorites.user_id = users.id
+  `;
+  if (userId) {
+    queryParams.push(userId);
+    queryString += `WHERE maps.user_id = $${queryParams.length}`;
+  }
+  queryString += `
+  GROUP BY maps.id
+  ORDER BY count(favorites.*) DESC
+  `;
+  if (limit) {
+    queryParams.push(limit);
+    queryString += `LIMIT $${queryParams.length}`;
+  } else {
+    queryString += `LIMIT 5`;
+  }
+  return db
+    .query(queryString, [limit])
     .then((result) => {
       return result.rows[0];
     })
@@ -46,8 +88,11 @@ const getMapsFromUser = function(userId) {
 // insert new pin
 const addMap = function(map) {
   const queryString = `
-  INSERT INTO pins (
+  INSERT INTO maps (
     user_id,
+    latitude,
+    longitude,
+    zoom,
     title,
     description,
     last_edit
@@ -57,6 +102,9 @@ const addMap = function(map) {
   `;
   const values = [
     map["user_id"],
+    map["latitude"],
+    map["longitude"],
+    map["zoom"],
     map["title"],
     map["description"],
     map["last_edit"],

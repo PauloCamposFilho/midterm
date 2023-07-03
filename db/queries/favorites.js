@@ -79,4 +79,34 @@ const getMostFavorited = function(userId) {
     });
 };
 
-module.exports = { getAllFavoritesForUser, getFavoriteCountForMap, getFavoriteCountForUser, getMostFavorited };
+
+///////////////////////////////
+////        INSERT         ////
+///////////////////////////////
+
+// insert a new favorite
+const addFavorite = function(favorite) {
+  const queryString = `
+  INSERT INTO favorites (
+    map_id,
+    user_id,
+  )
+  VALUES ($1, $2)
+  RETURNING *
+  `;
+  const values = [
+    favorite["map_id"],
+    favorite["user_id"],
+  ];
+  return db
+    .query(queryString, values)
+    .then((result) => {
+      return (result.rows[0]);
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+
+module.exports = { getAllFavoritesForUser, getFavoriteCountForMap, getFavoriteCountForUser, getMostFavorited, addFavorite };

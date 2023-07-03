@@ -17,4 +17,33 @@ const getAllEditorsForMap = function(mapId) {
     `, [mapId]);
 };
 
-module.exports = { getAllEditorsForMap };
+///////////////////////////////
+////        INSERT         ////
+///////////////////////////////
+
+// insert a new favorite
+const addEditor = function(editor) {
+  const queryString = `
+  INSERT INTO favorites (
+    map_id,
+    user_id,
+  )
+  VALUES ($1, $2)
+  RETURNING *
+  `;
+  const values = [
+    editor["map_id"],
+    editor["user_id"],
+  ];
+  return db
+    .query(queryString, values)
+    .then((result) => {
+      return (result.rows[0]);
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+
+module.exports = { getAllEditorsForMap, addEditor };

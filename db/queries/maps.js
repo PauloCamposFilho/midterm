@@ -73,7 +73,7 @@ const getTopMaps = function (userId, limit) {
   return db
     .query(queryString, [limit])
     .then((result) => {
-      return result.rows[0];
+      return result.rows;
     })
     .catch((err) => {
       console.log(err.message);

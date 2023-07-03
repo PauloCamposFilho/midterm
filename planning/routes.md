@@ -20,5 +20,8 @@
 * PATCH /pins/:map_id
 * DELETE /pins/:map_id
 
+## Register
+* POST /register
+
 ## Favourites / Editors
 * No routing required. Contained to both GET /users/:id AND GET /maps/:id AND POST /pins/:map_id AND PATCH /pins/:map_id respectively.

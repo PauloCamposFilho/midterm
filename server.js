@@ -36,6 +36,7 @@ const mapsRoutes = require('./routes/maps')(queries);
 const pinsRoutes = require('./routes/pins')(queries);
 const favoritesRoutes = require('./routes/favorites')(queries);
 const editorsRoutes = require('./routes/editors')(queries);
+const registerRoutes = require('./routes/register')(queries);
 
 // Mount all resource routes
 app.use('/users', usersRoutes);
@@ -43,6 +44,7 @@ app.use('/maps', mapsRoutes);
 app.use('/pins', pinsRoutes);
 app.use('/favorites', favoritesRoutes);
 app.use('/editors', editorsRoutes);
+app.use("/register", registerRoutes);
 
 // Home page
 // Warning: avoid creating more routes in this file!

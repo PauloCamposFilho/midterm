@@ -26,19 +26,23 @@ app.use(
 );
 app.use(express.static('public'));
 
-// Separated Routes for each Resource
-// Note: Feel free to replace the example routes below with your own
-const userApiRoutes = require('./routes/users-api');
-const widgetApiRoutes = require('./routes/widgets-api');
-const usersRoutes = require('./routes/users');
+
+// Index of query functions
+const queries = require('./db/queries');
+
+// Resource Routes
+const usersRoutes = require('./routes/users')(queries);
+const mapsRoutes = require('./routes/maps')(queries);
+const pinsRoutes = require('./routes/pins')(queries);
+const favoritesRoutes = require('./routes/favorites')(queries);
+const editorsRoutes = require('./routes/editors')(queries);
 
 // Mount all resource routes
-// Note: Feel free to replace the example routes below with your own
-// Note: Endpoints that return data (eg. JSON) usually start with `/api`
-app.use('/api/users', userApiRoutes);
-app.use('/api/widgets', widgetApiRoutes);
 app.use('/users', usersRoutes);
-// Note: mount other resources here, using the same pattern above
+app.use('/maps', mapsRoutes);
+app.use('/pins', pinsRoutes);
+app.use('/favorites', favoritesRoutes);
+app.use('/editors', editorsRoutes);
 
 // Home page
 // Warning: avoid creating more routes in this file!
@@ -51,3 +55,23 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
+
+
+///////////////////////////////
+//// TEMPLATE BOILERPLATE  ////
+///////////////////////////////
+
+// ROUTING
+// Separated Routes for each Resource
+// Note: Feel free to replace the example routes below with your own
+// const userApiRoutes = require('./routes/users-api');
+// const widgetApiRoutes = require('./routes/widgets-api');
+// const usersRoutes = require('./routes/users');
+
+// MOUNTING
+// Mount all resource routes
+// Note: Feel free to replace the example routes below with your own
+// Note: Endpoints that return data (eg. JSON) usually start with `/api`
+// app.use('/api/users', userApiRoutes);
+// app.use('/api/widgets', widgetApiRoutes);
+// Note: mount other resources here, using the same pattern above

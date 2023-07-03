@@ -14,7 +14,13 @@ const getAllEditorsForMap = function(mapId) {
     JOIN users ON editors.user_id = users.id
     JOIN maps ON editors.map_id = maps.id
     WHERE maps.id = $1
-    `, [mapId]);
+    `, [mapId])
+    .then((result) => {
+      return result.rows;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 };
 
 ///////////////////////////////

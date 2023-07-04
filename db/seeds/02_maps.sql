@@ -1,4 +1,4 @@
-INSERT INTO maps (user_id, latitude, longitude, zoom, title, description, last_edit)
+INSERT INTO maps (user_id, latitude, longitude, zoom, title, thumbnail_phto, description, last_edit)
 VALUES
 (1, 40.6872, -74.0439, 50, 'Tall Buildings', 'A collection of tall buildings around the world', '2023-06-15 20:30:00'),
 (2, 48.8566, 2.3522, 50, 'Awesome Trees', 'Beautiful and unique trees in different locations', '2023-06-20 12:45:00'),

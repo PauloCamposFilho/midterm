@@ -6,10 +6,23 @@
  */
 
 const express = require('express');
+const { addFavorite } = require('../db/queries/favorites');
 const router  = express.Router();
 
 router.post('/', (req, res) => {
-  // res.render('users');
+  const userId = req.session["user_id"];
+  const mapId = req.body["mapId"];
+  addFavorite(mapId, userId)
+    .then((success) => {
+      if (success) {
+        res.redirect(`/map/${mapId}`); // redirection may not be the desired behaviour, placeholder
+      } else {
+        res.status(404).send("Unable to add map to favorites");
+      }
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
   res.status(404).send("Not Yet Implemented.");
 });
 

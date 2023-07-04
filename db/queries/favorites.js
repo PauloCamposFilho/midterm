@@ -85,7 +85,7 @@ const getMostFavorited = function(userId) {
 ///////////////////////////////
 
 // insert a new favorite
-const addFavorite = function(favorite) {
+const addFavorite = function(mapId, userId) {
   const queryString = `
   INSERT INTO favorites (
     map_id,
@@ -95,13 +95,13 @@ const addFavorite = function(favorite) {
   RETURNING *
   `;
   const values = [
-    favorite["map_id"],
-    favorite["user_id"],
+    mapId,
+    userId,
   ];
   return db
     .query(queryString, values)
     .then((result) => {
-      return (result.rows[0]);
+      return result.rowCount > 0;
     })
     .catch((err) => {
       console.log(err.message);

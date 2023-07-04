@@ -11,7 +11,7 @@ const { addEditor } = require('../db/queries/editors');
 const router  = express.Router();
 
 router.post('/', (req, res) => {
-  const userId = req.session["user_id"];
+  /* const userId = req.session["user_id"];
   const mapId = req.body["mapId"];
   const newEditor = req.body["userId"];
   getMapWithID(mapId)
@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
         addEditor(mapId, newEditor)
           .then((success) => {
             if (success) {
-              res.redirect(`maps/${mapId}`);
+              res.redirect(`maps/${mapId}`); // redirection may not be the desired behaviour, placeholder
             } else {
               res.status(404).send("Unable to add new editor");
             }
@@ -34,7 +34,7 @@ router.post('/', (req, res) => {
     })
     .catch((err) => {
       console.log(err.message);
-    });
+    }); */
   res.status(404).send("Not Yet Implemented.");
 });
 

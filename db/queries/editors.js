@@ -28,7 +28,7 @@ const getAllEditorsForMap = function(mapId) {
 ///////////////////////////////
 
 // insert a new favorite
-const addEditor = function(editor) {
+const addEditor = function(mapId, userId) {
   const queryString = `
   INSERT INTO favorites (
     map_id,
@@ -38,13 +38,13 @@ const addEditor = function(editor) {
   RETURNING *
   `;
   const values = [
-    editor["map_id"],
-    editor["user_id"],
+    mapId,
+    userId,
   ];
   return db
     .query(queryString, values)
     .then((result) => {
-      return (result.rows[0]);
+      return result.rowCount > 0;
     })
     .catch((err) => {
       console.log(err.message);

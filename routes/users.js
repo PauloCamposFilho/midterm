@@ -40,7 +40,8 @@ router.patch('/:id', (req, res) => {
   // check which values are being updated
   for (const column of userProperties) {
     for (const property of Object.keys(req.body)) {
-      if (property === column) {
+      // check whether input field is empty
+      if (property === column && req.body[property] !== "") {
         updates[property] = req.body[property];
       }
     }
@@ -58,7 +59,7 @@ router.patch('/:id', (req, res) => {
     })
     .catch((err) => {
       console.log(err.message);
-    });*/
+    }); */
   res.status(404).send("Not Yet Implemented.");
 });
 

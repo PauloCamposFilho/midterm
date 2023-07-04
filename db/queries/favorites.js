@@ -109,4 +109,23 @@ const addFavorite = function(favorite) {
 };
 
 
-module.exports = { getAllFavoritesForUser, getFavoriteCountForMap, getFavoriteCountForUser, getMostFavorited, addFavorite };
+///////////////////////////////
+////        DELETE         ////
+///////////////////////////////
+
+const deleteFavorite = function(mapId, userId) {
+  return db
+    .query(`
+    DELETE FROM favorites WHERE map_id = $1 AND user_id = $2
+    `, [mapId, userId])
+    .then((result) => {
+      return result.rowCount > 0;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+
+
+module.exports = { getAllFavoritesForUser, getFavoriteCountForMap, getFavoriteCountForUser, getMostFavorited, addFavorite, deleteFavorite };

@@ -8,6 +8,7 @@ CREATE TABLE maps (
   longitude DOUBLE PRECISION NOT NULL,
   zoom SMALLINT,
   title VARCHAR(255) NOT NULL,
+  thumbnail_photo VARCHAR(255),
   description TEXT,
   last_edit TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

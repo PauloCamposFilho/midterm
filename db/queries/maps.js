@@ -86,7 +86,7 @@ const getTopMaps = function (userId, limit) {
 ////        INSERT         ////
 ///////////////////////////////
 
-// insert new pin
+// insert new map
 const addMap = function(map) {
   const queryString = `
   INSERT INTO maps (
@@ -95,10 +95,11 @@ const addMap = function(map) {
     longitude,
     zoom,
     title,
+    thumbnail_photo,
     description,
     last_edit
   )
-  VALUES ($1, $2, $3, $4)
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
   RETURNING *
   `;
   const values = [
@@ -107,6 +108,7 @@ const addMap = function(map) {
     map["longitude"],
     map["zoom"],
     map["title"],
+    map["thumbnail_photo"],
     map["description"],
     map["last_edit"],
   ];

@@ -7,21 +7,6 @@ L.Map.addInitHook(function() {
   this.getContainer()._leaflet_map = this;
 });
 
-const pinsTest = [
-  {
-    title: "This is Test1",
-    description: "This is description A",
-    Lat: 49.268813,
-    Lon: -122.944436
-  },
-  {
-    title: "This is Test1",
-    description: "This is description B",
-    Lat: 49.275057,
-    Lon: -122.930789
-  }
-];
-
 const onMarkerClickHandler = (e) => {
   const _marker = e.target;
   $("input[name='id']").val(_marker._id);
@@ -50,9 +35,9 @@ const onMapClick = (event) => {
 };
 
 const initMap = () => {
-  const mapId = $("#map").attr("data-mapId");
+  const mapId = $("#map").attr("data-mapId") || 0;
   console.log('mapId', mapId);
-  if (mapId) {
+  if (mapId > 0) {
     return buildMap(null, mapId);
   }
   // Check if geolocation is supported by the browser
@@ -70,6 +55,10 @@ const buildMap = async(position, mapId) => {
   let longitude;
   let zoom = 15;
   let _info;
+  let _title = "";
+  let _description = "";
+  let _mapId = mapId || -1;
+  
   if (!mapId) {
     // Retrieve latitude and longitude
     if (position.coords) { // geolocation OK
@@ -95,9 +84,11 @@ const buildMap = async(position, mapId) => {
   }
   
   // Create a map centered at the current position
-  let _mapId = mapId || -1;
-  let _title = _info.mapInfo.title || "";
-  let _description = _info.mapInfo.description || "";
+  if (_info && _info.mapInfo) {
+    _title = _info.mapInfo.title || "";
+    _description = _info.mapInfo.description || "";
+  }
+  
   _map = L.map('map').setView([latitude, longitude], zoom); // Adjust the zoom level as needed
   _map._appId = _mapId;
   _map._title = _title;
@@ -109,9 +100,10 @@ const buildMap = async(position, mapId) => {
     maxZoom: 18
   }).addTo(_map);
 
-  // test: map has predefined pins.
-  
-  renderPinsToMap(_info.markerInfo, _map);
+  // add pins to map, if they exist.
+  if (_info && _info.markerInfo) {
+    renderPinsToMap(_info.markerInfo, _map);
+  }
 
   // add event
   _map.on('click', onMapClick);

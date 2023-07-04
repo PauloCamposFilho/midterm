@@ -6,10 +6,28 @@
  */
 
 const express = require('express');
+const { addUser } = require('../db/queries/users');
 const router  = express.Router();
 
 router.post('/', (req, res) => {
-  // res.render('users');
+  const user = {
+    username: req.body["username"],
+    email: req.body["email"],
+    password: req.body["password"],
+    profile_picture: req.body["profile_picture"],
+  };
+  addUser(user)
+    .then((result) => {
+      if (result) {
+        req.session["user_id"] = result["id"];
+        res.redirect("/");
+      } else {
+        res.status(400).send("Failed to create user.");
+      }
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
   res.status(404).send("Not Yet Implemented.");
 });
 

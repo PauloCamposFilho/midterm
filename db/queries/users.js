@@ -14,7 +14,7 @@ const getUserWithEmail = function(email) {
     WHERE email = $1
     `, [email])
     .then((result) => {
-      return (result.rows[0]);
+      return result.rows[0];
     })
     .catch((err) => {
       console.log(err.message);
@@ -62,7 +62,7 @@ const addUser = function(user) {
   return db
     .query(queryString, values)
     .then((result) => {
-      return (result.rows[0]);
+      return result.rows[0]["id"];
     })
     .catch((err) => {
       console.log(err.message);

@@ -127,19 +127,25 @@ const addMap = function(map) {
 ///////////////////////////////
 
 const updateMap = function (mapId, updates) {
+  // console.log("made it in here");
+  const columns = [];
   const values = [];
   const parameterizedStrings = [];
   let queryString = `
   UPDATE maps
   SET `;
   for (const column in updates) {
-    values.push(column, updates[column]);
-    parameterizedStrings.push(`$${values.length - 1} = $${values.length}, `);
+    columns.push(columns)
+    values.push(updates[column]);
+    parameterizedStrings.push(`${column} = $${values.length}`);
   }
   values.push(mapId);
   queryString += `${parameterizedStrings.join(', ')}
   WHERE id = $${values.length}
   `;
+  console.log(values);
+  console.log(parameterizedStrings);
+  console.log(queryString);
   return db
     .query(queryString, values)
     .then((result) => {
@@ -147,6 +153,7 @@ const updateMap = function (mapId, updates) {
     })
     .catch((err) => {
       console.log(err.message);
+      throw new Error(err.message);
     });
 };
 

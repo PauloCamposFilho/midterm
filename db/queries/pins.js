@@ -63,19 +63,25 @@ const addPin = function(pin) {
 ///////////////////////////////
 
 const updatePin = function (pinId, updates) {
+  const columns = [];
   const values = [];
   const parameterizedStrings = [];
   let queryString = `
   UPDATE pins
   SET `;
   for (const column in updates) {
-    values.push(column, updates[column]);
-    parameterizedStrings.push(`$${values.length - 1} = $${values.length}, `);
+    columns.push(columns)
+    values.push(updates[column]);
+    parameterizedStrings.push(`${column} = $${values.length}`);
   }
   values.push(pinId);
   queryString += `${parameterizedStrings.join(', ')}
   WHERE id = $${values.length}
   `;
+  console.log("--- PINS ---");
+  console.log(values);
+  console.log(parameterizedStrings);
+  console.log(queryString);
   return db
     .query(queryString, values)
     .then((result) => {

@@ -11,7 +11,7 @@ const db_helpers = {
       type: 'GET'
     });
   },
-  editMapInfo: (mapInfoObj) => {
+  editMapInfo: async (mapInfoObj) => {
     return db_helpers.ajaxRequestWrapper({
       url: `http://localhost:3000/maps/${mapInfoObj.mapInfo.id}`,
       type: 'PATCH',

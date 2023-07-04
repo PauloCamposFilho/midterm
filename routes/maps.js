@@ -20,7 +20,7 @@ router.get('/:id', (req, res) => {
   const templateVars = {};
   templateVars.mapId = _mapId;
   if (_mapId) {
-    return res.status(200).render("map", templateVars);  
+    return res.status(200).render("map", templateVars);
   } else {
     return res.status(500).send("Malformed request. No mapId given.");
   }
@@ -45,22 +45,50 @@ router.get('/:id/info', (req, res) => {
     })
     .catch((err) => {
       return res.status(500).send(err);
-    });    
+    });
 });
+
 router.post('/', (req, res) => {
   // res.render('users');
   res.status(404).send("Not Yet Implemented.");
 });
+
 router.patch('/:id', (req, res) => {
-  // res.render('users');
   console.log('Entered the PATCH maps/:id route');
-  console.log(req.body.mapInfo);
-  console.log(req.body.markerInfo);
-  
   if (req.body) {
-    return res.status(200).send("OK");
+    const _mapId = req.body.mapInfo.id;
+    const _mapObj = {
+      title: req.body.mapInfo.title,
+      description: req.body.mapInfo.description,
+      latitude: req.body.mapInfo.latitude,
+      longitude: req.body.mapInfo.longitude,
+      zoom: req.body.mapInfo.zoom
+    };
+    queries
+      .updateMap(_mapId, _mapObj)
+      .then(() => {
+        for (const pin in req.body.markerInfo) {
+          const _markerObj = {
+            title: req.body.markerInfo[pin].title,
+            description: req.body.markerInfo[pin].description,
+            latitude: req.body.markerInfo[pin].latitude,
+            longitude: req.body.markerInfo[pin].longitude
+          };
+          console.log(_markerObj);
+          pinQueries
+            .updatePin(req.body.markerInfo[pin].id, _markerObj)
+            .catch((err) => {
+              return res.status(500).send(err.message);
+            });
+        }
+      })
+      .then(() => {
+        return res.status(200).send("Map and Pin information updated.");
+      })
+      .catch((err) => {
+        return res.status(500).send(err.message);
+      });
   }
-  res.status(404).send("Not Yet Implemented.");
 });
 router.delete('/:id', (req, res) => {
   // res.render('users');

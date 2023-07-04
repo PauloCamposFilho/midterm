@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>LeafletJS - Current Position</title>
+    <title>WikiMap</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Javascript -->
@@ -17,12 +17,14 @@
   </head>
   <body>
     <div id="map" data-mapId="<%= mapId %>"></div>
-    <form id="pinInfo">
+    <form id="markerInfo">
       <input type="number" name="id" placeholder="0" />
       <input type="text" name="title" placeholder="Title"/>
       <input type="text" name="description" placeholder="description"/>
-      <input type="text" name="coordinates" placeholder="coordinates"/>
+      <input type="text" name="latitude" />
+      <input type="text" name="longitude" />
       <button type="button" id="savePinData">Save Pin</button>
     </form>
+    <button type="button" id="saveMap">Save Map</button>
   </body>
 </html>

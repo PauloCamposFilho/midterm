@@ -17,8 +17,18 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   // res.render('users');
   const _mapId = req.params.id;
+  const templateVars = {};
+  templateVars.mapId = _mapId;
+  if (_mapId) {
+    return res.status(200).render("map", templateVars);  
+  } else {
+    return res.status(500).send("Malformed request. No mapId given.");
+  }
+});
+router.get('/:id/info', (req, res) => {
+  const _mapId = req.params.id;
   let mapInfo;
-  let pinInfo;
+  let markerInfo;
   console.log("mapId", _mapId);
 
   queries.getMapWithID(_mapId)
@@ -26,18 +36,16 @@ router.get('/:id', (req, res) => {
       mapInfo = response;
       pinQueries.getAllPinsForMap(_mapId)
         .then((pinResponse) => {
-          pinInfo = pinResponse;
-          console.log(pinInfo);
-          res.status(200).send({ mapInfo, pinInfo});
+          markerInfo = pinResponse;
+          return res.status(200).send({ mapInfo, markerInfo});
         })
         .catch((err) => {
-          console.log(err.message);
+          return res.status(500).send(err);
         });
     })
     .catch((err) => {
-      console.log(err.message);
-    });  
-  //res.status(404).send("Not Yet Implemented.");
+      return res.status(500).send(err);
+    });    
 });
 router.post('/', (req, res) => {
   // res.render('users');

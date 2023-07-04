@@ -18,6 +18,7 @@ const getMapWithID = function(mapId) {
     })
     .catch((err) => {
       console.log(err.message);
+      throw new Error(err.message);
     });
 };
 

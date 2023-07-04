@@ -10,6 +10,7 @@
 ## Maps
 * GET /maps
 * GET /maps/:id
+* GET /maps/:id/info
 * POST /maps
 * PATCH /maps/:id
 * DELETE /maps/:id

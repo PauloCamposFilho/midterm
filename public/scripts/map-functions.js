@@ -80,7 +80,14 @@ const buildMap = async(position, mapId) => {
       longitude = -122.946625;
     }
   } else { // lets get the map info!
-    _info = await db_helpers.getMapInfo(mapId);
+    try {
+      _info = await db_helpers.getMapInfo(mapId);
+    }
+    catch(err) {
+      console.log(err);
+      console.log(_info);
+      return; 
+    }
     console.log(_info);
     latitude = _info.mapInfo.latitude;
     longitude = _info.mapInfo.longitude;
@@ -104,7 +111,7 @@ const buildMap = async(position, mapId) => {
 
   // test: map has predefined pins.
   
-  renderPinsToMap(_info.pinInfo, _map);
+  renderPinsToMap(_info.markerInfo, _map);
 
   // add event
   _map.on('click', onMapClick);
@@ -142,14 +149,11 @@ const saveMap = async() => {
     longitude: _mapCoords.lon,
     zoom: _mapZoom
   };
-  console.log("--- saveMap ---");
-  console.log("mapInfo", mapInfo);
   const markerInfo = getAllMarkers(_map);
-  console.log("markerInfo", markerInfo);
   const response = await db_helpers.editMapInfo({ mapInfo, markerInfo });
-  // if (response && response.status === 200) {
-  //   alert("map saved");
-  // }
+  if (response) {
+    console.log(response);
+  }
 };
 
 const getAllMarkers = (map) => {

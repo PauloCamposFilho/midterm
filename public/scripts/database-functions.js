@@ -7,14 +7,11 @@ const db_helpers = {
   },
   getMapInfo: async(mapId) => {
     return db_helpers.ajaxRequestWrapper({
-      url: `http://localhost:3000/maps/${mapId}`,
+      url: `http://localhost:3000/maps/${mapId}/info`,
       type: 'GET'
     });
   },
   editMapInfo: (mapInfoObj) => {
-    console.log("---edit map info ---");
-    console.log("mapInfoObj", mapInfoObj);
-    console.log('pinIInfo', mapInfoObj.markerInfo);
     return db_helpers.ajaxRequestWrapper({
       url: `http://localhost:3000/maps/${mapInfoObj.mapInfo.id}`,
       type: 'PATCH',
@@ -52,8 +49,8 @@ const db_helpers = {
         success: function(res) {
           resolve(res);
         },
-        error: function(err) {
-          reject(err.message);
+        error: function (xhr, textStatus, error) {
+          reject(error);
         }
       });
     });

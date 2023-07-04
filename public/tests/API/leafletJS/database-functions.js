@@ -1,17 +1,31 @@
 const db_helpers = {
-  getPinsForMap: async (mapId) => {
+  getPinsForMap: async(mapId) => {
     return db_helpers.ajaxRequestWrapper({
       url: `http://localhost:3000/pins/${mapId}`,
       type: 'GET'
     });
   },
-  getMapInfo: async (mapId) => {
+  getMapInfo: async(mapId) => {
     return db_helpers.ajaxRequestWrapper({
       url: `http://localhost:3000/maps/${mapId}`,
       type: 'GET'
     });
   },
-  ajaxRequestWrapper: async (options) => {
+  editMapInfo: (mapInfoObj) => {
+    console.log("---edit map info ---");
+    console.log("mapInfoObj", mapInfoObj);
+    console.log('pinIInfo', mapInfoObj.markerInfo);
+    return db_helpers.ajaxRequestWrapper({
+      url: `http://localhost:3000/maps/${mapInfoObj.mapInfo.id}`,
+      type: 'PATCH',
+      data: {
+        mapInfo: mapInfoObj.mapInfo,
+        markerInfo: mapInfoObj.markerInfo
+      },
+      dataType: 'json'
+    });
+  },
+  ajaxRequestWrapper: async(options) => {
     /*
     options {
       url: endpoint URL,
@@ -25,7 +39,7 @@ const db_helpers = {
         reject("options parameter object cannot be null");
       }
       if (!options.type) {
-        options.type = 'GET'
+        options.type = 'GET';
       }
       if (!options.dataType) {
         options.dataType = 'text';
@@ -34,6 +48,7 @@ const db_helpers = {
         url: options.url,
         type: options.type,
         data: options.data,
+        datatype: options.dataType,
         success: function(res) {
           resolve(res);
         },
@@ -42,13 +57,5 @@ const db_helpers = {
         }
       });
     });
-  }  
+  }
 };
-// async function getData() {
-//   try {
-//     return db_helpers.ajaxRequestWrapper({ url: 'https://api.ipify.org?format=json', dataType: 'JSON' });    
-//   } catch (error) {
-//     console.log(error);
-//   }
-  
-// }

@@ -24,7 +24,7 @@ const pinsTest = [
 
 const onMarkerClickHandler = (e) => {
   const _marker = e.target;
-  $("input[name='id']").val(_marker._leaflet_id);
+  $("input[name='id']").val(_marker._id);
   $("input[name='title']").val(_marker._title);
   $("input[name='description']").val(_marker._description);
   $("input[name='coordinates']").val(_marker._latlng);
@@ -49,19 +49,6 @@ const onMapClick = (event) => {
   marker.on('contextmenu', onMarkerRightClickHandler);
 };
 
-const getAllMarkers = (map) => {
-  let allMarkers = [];
-  for (const info in map._layers) {
-    if (map._layers[info] instanceof L.Marker) { // is a marker
-      const _marker = map._layers[info];
-      allMarkers.push(map._layers[info]);
-      console.log(`Marker ID (${_marker._leaflet_id}), Title: ${_marker._title}, Description: ${_marker._description}, Coords: ${_marker._latlng}`);
-    }
-  }
-  console.log(allMarkers);
-  return allMarkers;
-};
-
 const initMap = () => {
   const mapId = $("#map").attr("data-mapId");
   console.log('mapId', mapId);
@@ -78,7 +65,7 @@ const initMap = () => {
   }
 };
 
-const buildMap = async (position, mapId) => {
+const buildMap = async(position, mapId) => {
   let latitude;
   let longitude;
   let zoom = 15;
@@ -97,13 +84,17 @@ const buildMap = async (position, mapId) => {
     console.log(_info);
     latitude = _info.mapInfo.latitude;
     longitude = _info.mapInfo.longitude;
-    zoom = _info.mapInfo.zoom;    
+    zoom = _info.mapInfo.zoom;
   }
   
   // Create a map centered at the current position
   let _mapId = mapId || -1;
+  let _title = _info.mapInfo.title || "";
+  let _description = _info.mapInfo.description || "";
   _map = L.map('map').setView([latitude, longitude], zoom); // Adjust the zoom level as needed
   _map._appId = _mapId;
+  _map._title = _title;
+  _map._description = _description;
 
   // Add a tile layer
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -120,7 +111,7 @@ const buildMap = async (position, mapId) => {
 };
 
 // function is called after database-functions.js getPinsForMap
-const renderPinsToMap = (pinsObj, mapObj) => {  
+const renderPinsToMap = (pinsObj, mapObj) => {
   if (!Array.isArray(pinsObj) || pinsObj.length === 0) {
     return;
   }
@@ -130,10 +121,51 @@ const renderPinsToMap = (pinsObj, mapObj) => {
     // set custom properties
     marker._title = pin.title;
     marker._description = pin.description;
+    marker._id = pin.id;
     // pin it to the map.
     mapObj.addLayer(marker);
     // add event handlers.
     marker.on('click', onMarkerClickHandler);
     marker.on('contextmenu', onMarkerRightClickHandler);
   }
+};
+
+const saveMap = async() => {
+  const _map = $("#map")[0]._leaflet_map;
+  const _mapCoords = _map.getCenter();
+  const _mapZoom = _map.getZoom();
+  const mapInfo = {
+    id: _map._appId,
+    title: _map._title,
+    description: _map._description,
+    latitude: _mapCoords.lat,
+    longitude: _mapCoords.lon,
+    zoom: _mapZoom
+  };
+  console.log("--- saveMap ---");
+  console.log("mapInfo", mapInfo);
+  const markerInfo = getAllMarkers(_map);
+  console.log("markerInfo", markerInfo);
+  const response = await db_helpers.editMapInfo({ mapInfo, markerInfo });
+  // if (response && response.status === 200) {
+  //   alert("map saved");
+  // }
+};
+
+const getAllMarkers = (map) => {
+  let allMarkers = [];
+  for (const info in map._layers) {
+    if (map._layers[info] instanceof L.Marker) { // is a marker
+      const _marker = map._layers[info];
+      allMarkers.push({
+        id: _marker._id,
+        map_id: map._appId,
+        title: _marker._title,
+        description: _marker._description,
+        latitude: _marker._latlng.lat,
+        longitude: _marker._latlng.lon
+      });
+    }
+  }
+  return allMarkers;
 };

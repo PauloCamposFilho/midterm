@@ -45,6 +45,13 @@ router.post('/', (req, res) => {
 });
 router.patch('/:id', (req, res) => {
   // res.render('users');
+  console.log('Entered the PATCH maps/:id route');
+  console.log(req.body.mapInfo);
+  console.log(req.body.markerInfo);
+  
+  if (req.body) {
+    return res.status(200).send("OK");
+  }
   res.status(404).send("Not Yet Implemented.");
 });
 router.delete('/:id', (req, res) => {

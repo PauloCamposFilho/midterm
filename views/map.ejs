@@ -7,6 +7,7 @@
     <%- include('partials/_head') %>
   </head>
   <body>
+    <%- include('partials/_nav-bar') %>
     <div class="map-container">
       <div id="map" data-mapId="<%= mapId %>"></div>
       <div style="display: flex; flex-wrap: wrap;">
@@ -14,8 +15,8 @@
           <input type="hidden" name="id" value="<%= mapId %>">
           <input type="text" name="title" placeholder="Title"/>
           <input type="text" name="description" placeholder="description"/>
-          <input type="text" name="thumbnail_photo" placeholder="URL of image"/>        
-          <button type="button" id="saveMap">Save Map</button>        
+          <input type="text" name="thumbnail_photo" placeholder="URL of image"/>
+          <button type="button" id="saveMap">Save Map</button>
           <img class="map-thumbnail" style="max-width: 100px;">
         </form>
       </div>
@@ -27,7 +28,7 @@
       <input type="text" name="latitude" />
       <input type="text" name="longitude" />
       <button type="button" id="savePinData">Save Pin</button>
-    </form>    
+    </form>
     <% if (mapId > 0) { %>
       <select id="mapEditors">
         <option value="0">Select Editor</option>

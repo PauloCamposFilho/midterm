@@ -1,0 +1,38 @@
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand">WikiMaps</a>
+    <div class="d-flex">
+      <div class="navbar-nav align-self-center ms-1 me-1">
+        <a class="nav-item nav-link" href="/maps">Map Index</a>
+      </div>
+      <% if (!user) { %>
+      <div class="navbar-nav ms-1 me-1">
+        <form action="/register" method="POST">
+          <div class="nav-item nav-link">
+            <button type="submit" class="btn btn-primary">Register</button>
+          </div>
+        </form>
+      </div>
+      <div class="navbar-nav ms-1 me-1">
+        <form action="/users" method="POST">
+          <div class="nav-item nav-link">
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
+        </form>
+      </div>
+      <% } else { %>
+      <div class="navbar-nav ms-1 me-1">
+        <div class="nav-item nav-link">
+          Profile
+        </div>
+      <divclass="navbar-nav ms-1 me-1">
+        <form action="/users" method="DELETE">
+          <div class="nav-item nav-link">
+            <button type="submit" class="btn btn-primary">Logout</button>
+          </div>
+        </form>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</nav>

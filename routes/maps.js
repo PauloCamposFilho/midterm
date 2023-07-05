@@ -20,6 +20,7 @@ router.get('/:id', async (req, res) => {
   const _mapId = req.params.id;
   const templateVars = {};
   templateVars.mapId = _mapId;
+  templateVars.user = req.session["user_id"];
   try {
     templateVars.users = await userQueries.getAllUsers();
     console.log(templateVars);
@@ -34,7 +35,7 @@ router.get('/:id', async (req, res) => {
 });
 
 router.get('/:id/info', async (req, res) => {
-  const _mapId = req.params.id;  
+  const _mapId = req.params.id;
   try {
     const mapInfo = await queries.getMapWithID(_mapId);
     const markerInfo = await pinQueries.getAllPinsForMap(_mapId);
@@ -42,7 +43,7 @@ router.get('/:id/info', async (req, res) => {
   }
   catch(err) {
     return res.status(500).send(err.message);
-  }  
+  }
 });
 
 router.post('/', async (req, res) => {
@@ -52,7 +53,7 @@ router.post('/', async (req, res) => {
     try {
       const insertMapResponse = await queries.addMap(_mapObj);
       _mapObj.id = insertMapResponse.id;
-      for (const pin in req.body.markerInfo) {        
+      for (const pin in req.body.markerInfo) {
         const _markerObj = objHelpers.buildMarkerObjectFromMarkerInfo(req.body.markerInfo[pin], _mapObj.id);
         const insertPinResponse = await pinQueries.addPin(_markerObj);
       }
@@ -60,7 +61,7 @@ router.post('/', async (req, res) => {
     }
     catch(err) {
       return res.status(500).send(err.message);
-    }    
+    }
   } else {
     res.status(400).send("Malformed request. Missing map/marker info");
   }
@@ -69,21 +70,21 @@ router.post('/', async (req, res) => {
 router.patch('/:id', async (req, res) => {
   console.log('Entered the PATCH maps/:id route');
   if (req.body) {
-    const _mapId = req.body.mapInfo.id;    
+    const _mapId = req.body.mapInfo.id;
     const _mapObj = objHelpers.buildMapObjectFromMapInfo(req.body.mapInfo);
     try {
       const updateResponse = await queries.updateMap(_mapId, _mapObj);
       const deleteResponse = await pinQueries.deletePinsWithMapId(_mapId);
-      for (const pin in req.body.markerInfo) {        
+      for (const pin in req.body.markerInfo) {
         const _markerObj = objHelpers.buildMarkerObjectFromMarkerInfo(req.body.markerInfo[pin], _mapId);
-        const pinInsertResponse = await pinQueries.addPin(_markerObj);        
+        const pinInsertResponse = await pinQueries.addPin(_markerObj);
       }
       return res.status(200).send("Map and Pin information edited.");
     }
     catch(err) {
       console.log(err);
       return res.status(500).send(err.message);
-    }    
+    }
   } else {
     res.status(400).send("Malformed request. Missing map/marker info");
   }

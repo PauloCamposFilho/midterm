@@ -17,13 +17,15 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  const _mapId = req.params.id;
+  const _mapId = req.params.id;  
   const templateVars = {};
   templateVars.mapId = _mapId;
   templateVars.userId = req.session["user_id"];
+  templateVars.userOwnsMap = false;
   try {
     templateVars.users = await userQueries.getAllUsers();
-    console.log(templateVars);
+    const mapInfo = await queries.getMapWithID(_mapId);
+    templateVars.userOwnsMap = templateVars.userId === mapInfo.user_id;    
     if (_mapId) {
       return res.status(200).render("map", templateVars);
     } else {
@@ -48,8 +50,12 @@ router.get('/:id/info', async (req, res) => {
 
 router.post('/', async (req, res) => {
   console.log("Entered the POST maps/ route");
+  if (!req.session.user_id) {
+    return res.status(400).send("User must be logged in to create a map.");
+  }
   if (req.body) {
     const _mapObj = objHelpers.buildMapObjectFromMapInfo(req.body.mapInfo, true);
+    _mapObj.user_id = req.session.user_id; // logged in user created this map.
     try {
       const insertMapResponse = await queries.addMap(_mapObj);
       _mapObj.id = insertMapResponse.id;
@@ -71,7 +77,7 @@ router.patch('/:id', async (req, res) => {
   console.log('Entered the PATCH maps/:id route');
   if (req.body) {
     const _mapId = req.body.mapInfo.id;
-    const _mapObj = objHelpers.buildMapObjectFromMapInfo(req.body.mapInfo);
+    const _mapObj = objHelpers.buildMapObjectFromMapInfo(req.body.mapInfo, true);
     try {
       const updateResponse = await queries.updateMap(_mapId, _mapObj);
       const deleteResponse = await pinQueries.deletePinsWithMapId(_mapId);

@@ -36,7 +36,7 @@ const getUserWithId = function(userId) {
     });
 };
 
-const getAllUsers = async () => {
+const getAllUsers = () => {
   const queryString = `SELECT * FROM users`;
   return db
     .query(queryString)

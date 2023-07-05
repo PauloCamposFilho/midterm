@@ -6,7 +6,7 @@ const db = require('../connection');
 ///////////////////////////////
 
 // fetch a map given its id
-const getMapWithID = async function(mapId) {
+const getMapWithID = function(mapId) {
   return db
     .query(`
     SELECT *
@@ -88,7 +88,7 @@ const getTopMaps = function (userId, limit) {
 ///////////////////////////////
 
 // insert new map
-const addMap = async function(map) {
+const addMap = function(map) {
   const queryString = `
   INSERT INTO maps (
     user_id,
@@ -127,7 +127,7 @@ const addMap = async function(map) {
 ////        UPDATE         ////
 ///////////////////////////////
 
-const updateMap = async function (mapId, updates) {
+const updateMap = function (mapId, updates) {
   // console.log("made it in here");
   const columns = [];
   const values = [];

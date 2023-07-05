@@ -82,19 +82,18 @@ router.delete('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  /* const email = req.body["email"];
-  getUserWithEmail(email)
+  getUserWithId(1) //auto-login as user 1
     .then((result) => {
       if (result) {
         req.session["user_id"] = result["id"];
+        return res.redirect("/maps/1"); //redirect to a placeholder map until /maps route completed
       } else {
         res.status(404).send("User not found.");
       }
     })
     .catch((err) => {
       console.log(err.message);
-    }); */
-  res.status(404).send("Not Yet Implemented.");
+    });
 });
 
 module.exports = router;

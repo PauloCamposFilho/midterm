@@ -33,6 +33,14 @@ const db_helpers = {
       dataType: 'json'
     });
   },
+  addEditorToMap: async (mapId, editorId) => {
+    return db_helpers.ajaxRequestWrapper({
+      url: `http://localhost:3000/editors/`,
+      type: 'POST',
+      data: { mapId, editorId },
+      datatype: 'json'
+    });
+  },
   ajaxRequestWrapper: async(options) => {
     /*
     options {

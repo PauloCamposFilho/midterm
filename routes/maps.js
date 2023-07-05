@@ -9,20 +9,27 @@ const express = require('express');
 const router  = express.Router();
 const queries = require('../db/queries/maps');
 const pinQueries = require("../db/queries/pins");
+const userQueries = require("../db/queries/users");
 const objHelpers = require("../helpers/objectBuilder");
 
 router.get('/', (req, res) => {
   res.status(404).send("Not Yet Implemented.");
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const _mapId = req.params.id;
   const templateVars = {};
   templateVars.mapId = _mapId;
-  if (_mapId) {
-    return res.status(200).render("map", templateVars);
-  } else {
-    return res.status(500).send("Malformed request. No mapId given.");
+  try {
+    templateVars.users = await userQueries.getAllUsers();
+    console.log(templateVars);
+    if (_mapId) {
+      return res.status(200).render("map", templateVars);
+    } else {
+      return res.status(500).send("Malformed request. No mapId given.");
+    }
+  } catch(err) {
+    return res.status(500).send(err.message);
   }
 });
 

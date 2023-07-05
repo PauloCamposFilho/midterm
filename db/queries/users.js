@@ -36,6 +36,19 @@ const getUserWithId = function(userId) {
     });
 };
 
+const getAllUsers = async () => {
+  const queryString = `SELECT * FROM users`;
+  return db
+    .query(queryString)
+    .then((result) => {
+      return result.rows;
+    })
+    .catch((err) => {
+      console.log(err.message)
+      throw new Error(err);
+    });
+};
+
 
 ///////////////////////////////
 ////        INSERT         ////
@@ -117,4 +130,4 @@ const deleteUser = function(userId) {
 };
 
 
-module.exports = { getUserWithEmail, getUserWithId, addUser, updateUser, deleteUser };
+module.exports = { getUserWithEmail, getUserWithId, addUser, updateUser, deleteUser, getAllUsers };

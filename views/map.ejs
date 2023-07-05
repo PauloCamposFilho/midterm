@@ -4,16 +4,7 @@
     <title>WikiMap</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Javascript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="../scripts/database-functions.js"></script>
-    <script src="../scripts/map-functions.js"></script>
-    <script src="../scripts/javaScript.js"></script>
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="../styles/styles.css" />
-    
+    <%- include('partials/_head') %>
   </head>
   <body>
     <div class="map-container">
@@ -36,7 +27,15 @@
       <input type="text" name="latitude" />
       <input type="text" name="longitude" />
       <button type="button" id="savePinData">Save Pin</button>
-    </form>
-    
+    </form>    
+    <% if (mapId > 0) { %>
+      <select id="mapEditors">
+        <option value="0">Select Editor</option>
+        <% for (const user in users) { %>
+          <option value="<%= users[user].id %>"><%= users[user].username %></option>
+        <% } %>
+      </select>
+      <button type="button" class="btn btn-primary addEditor">Add Editor</button>
+    <% } %>
   </body>
 </html>

@@ -6,36 +6,28 @@
  */
 
 const express = require('express');
-const { getMapWithID } = require('../db/queries/maps');
-const { addEditor } = require('../db/queries/editors');
+const mapQueries = require('../db/queries/maps');
+const editorQueries = require('../db/queries/editors');
+const userQueries = require('../db/queries/users');
 const router  = express.Router();
 
-router.post('/', (req, res) => {
-  /* const userId = req.session["user_id"];
+router.post('/', async (req, res) => {
+  const userId = req.session["user_id"];
   const mapId = req.body["mapId"];
-  const newEditor = req.body["userId"];
-  getMapWithID(mapId)
-    .then((result) => {
-      if (result["userId"] === userId) {
-        addEditor(mapId, newEditor)
-          .then((success) => {
-            if (success) {
-              res.redirect(`maps/${mapId}`); // redirection may not be the desired behaviour, placeholder
-            } else {
-              res.status(404).send("Unable to add new editor");
-            }
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });
-      } else {
-        res.status(401).send("Only the owner of a map may add new editors");
-      }
-    })
-    .catch((err) => {
-      console.log(err.message);
-    }); */
-  res.status(404).send("Not Yet Implemented.");
+  const newEditor = req.body["editorId"];
+  if (!userId || !mapId || !newEditor) {
+    return res.status(400).send("Malformed request. Missing parameters");
+  }
+  try {
+    const mapOwnerId = await mapQueries.getMapWithID(mapId).user_id;
+    if (mapOwnerId === userId) {
+      const addEditorResponse = await editorQueries.addEditor(mapId, newEditor);
+      const editorUser = await userQueries.getUserWithId(newEditor);
+      return res.status(200).send({ user: editorUser, statusCode: 200 });
+    } 
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
 });
 
 module.exports = router;

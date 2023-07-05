@@ -10,7 +10,7 @@ const { addFavorite } = require('../db/queries/favorites');
 const router  = express.Router();
 
 router.post('/', (req, res) => {
-  const userId = req.session["user_id"];
+  /* const userId = req.session["user_id"];
   const mapId = req.body["mapId"];
   addFavorite(mapId, userId)
     .then((success) => {
@@ -22,7 +22,7 @@ router.post('/', (req, res) => {
     })
     .catch((err) => {
       console.log(err.message);
-    });
+    }); */
   res.status(404).send("Not Yet Implemented.");
 });
 

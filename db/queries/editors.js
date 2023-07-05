@@ -28,7 +28,7 @@ const getAllEditorsForMap = function(mapId) {
 ///////////////////////////////
 
 // insert a new favorite
-const addEditor = function(mapId, userId) {
+const addEditor = async function(mapId, userId) {
   const queryString = `
   INSERT INTO favorites (
     map_id,

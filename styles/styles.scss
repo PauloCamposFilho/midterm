@@ -1,7 +1,14 @@
 #map {
   height: 800px;
-  width: 100%;
+  width: 75%;
 }
 #markerInfo {
   display: none;
+}
+.map-container {
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: flex-start;
 }

@@ -27,7 +27,7 @@ const getAllPinsForMap = function(mapId) {
 ///////////////////////////////
 
 // insert new pin
-const addPin = function(pin) {
+const addPin = async function(pin) {
   const queryString = `
   INSERT INTO pins (
     map_id,
@@ -110,5 +110,19 @@ const deletePin = function(pinId) {
     });
 };
 
+const deletePinsWithMapId = async (mapId) => {
+  return db
+    .query(`
+    DELETE FROM pins WHERE map_id = $1 `, [mapId])
+    .then((result) => {
+      return result.rowCount > 0;
+    })
+    .catch((err) => {
+      console.log(err.message);
+      throw new Error(err.message);
+    });
 
-module.exports = { getAllPinsForMap, addPin, updatePin, deletePin };
+};
+
+
+module.exports = { getAllPinsForMap, addPin, updatePin, deletePin, deletePinsWithMapId };

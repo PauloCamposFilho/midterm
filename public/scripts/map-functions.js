@@ -9,13 +9,13 @@ L.Map.addInitHook(function() {
 
 const onMarkerClickHandler = (e) => {
   const _marker = e.target;
-  $("input[name='id']").val(_marker._id);
-  $("input[name='title']").val(_marker._title);
-  $("input[name='description']").val(_marker._description);
-  $("input[name='latitude']").val(_marker._latlng.lat);
-  $("input[name='longitude']").val(_marker._latlng.lng);
+  _markerMapObject = _marker;
+  $("form#markerInfo input[name='id']").val(_marker._id);
+  $("form#markerInfo input[name='title']").val(_marker._title);
+  $("form#markerInfo input[name='description']").val(_marker._description);
+  $("form#markerInfo input[name='latitude']").val(_marker._latlng.lat);
+  $("form#markerInfo input[name='longitude']").val(_marker._latlng.lng);
   $("#markerInfo").slideDown();
-  //console.log(this._map); // the property _map points to the map object that a marker belongs to.
 };
 
 const onMarkerRightClickHandler = (e) => {
@@ -28,8 +28,9 @@ const onMapClickHandler = (event) => {
   const _map = event.target;
   let marker = new L.Marker(event.latlng, {draggable:true});
   marker._title = Math.random();
-  marker._description = (Math.random() + 1).toString(36).substring(7);
+  marker._description = (Math.random() + 1).toString(36).substring(7);  
   _map.addLayer(marker);
+  marker._id = marker._leaflet_id;
   console.log(_map.getContainer());
   marker.on('click', onMarkerClickHandler);
   marker.on('contextmenu', onMarkerRightClickHandler);
@@ -52,50 +53,54 @@ const initMap = () => {
 };
 
 const buildMap = async(position, mapId) => {
-  
-  // define map variables.
-  let latitude;
-  let longitude;
+
+  // define map variables.  
   let zoom = 15;
   let _info;
-  let _title = "";
-  let _description = "";
-  let _mapId = mapId || -1;
+
+  const mapObj = {
+    latitude: '',
+    longitude: '',
+    zoom: 15,
+    title: '',
+    description: '',
+    thumbnail_photo: '',
+    id: mapId || -1
+  };
 
   if (!mapId) {
     // Retrieve latitude and longitude
     if (position.coords) { // geolocation OK
-      latitude = position.coords.latitude;
-      longitude = position.coords.longitude;
+      mapObj.latitude = position.coords.latitude;
+      mapObj.longitude = position.coords.longitude;
     } else { // somewhere in Burnaby. Picked at random for default start location when creating map w/o geolocation
-      latitude = 49.262176;
-      longitude = -122.946625;
+      mapObj.latitude = 49.262176;
+      mapObj.longitude = -122.946625;
     }
   } else { // lets get the map info!
     try {
       _info = await db_helpers.getMapInfo(mapId);
+      mapObj.latitude = _info.mapInfo.latitude;
+      mapObj.longitude = _info.mapInfo.longitude;
+      mapObj.zoom = _info.mapInfo.zoom;
+      mapObj.title = _info.mapInfo.title || "";
+      mapObj.description = _info.mapInfo.description || "";
+      mapObj.thumbnail_photo = _info.mapInfo.thumbnail_photo;    
     }
     catch(err) {
       console.log(err);
       console.log(_info);
-      return; 
+      return;
     }
-    console.log(_info);
-    latitude = _info.mapInfo.latitude;
-    longitude = _info.mapInfo.longitude;
-    zoom = _info.mapInfo.zoom;
+    console.log(_info);    
   }
-  
-  // Create a map centered at the current position
-  if (_info && _info.mapInfo) {
-    _title = _info.mapInfo.title || "";
-    _description = _info.mapInfo.description || "";
-  }
-  
-  _map = L.map('map').setView([latitude, longitude], zoom); // Adjust the zoom level as needed
-  _map._appId = _mapId;
-  _map._title = _title;
-  _map._description = _description;
+
+  // Create a map centered at the current position 
+
+  const _map = L.map('map').setView([mapObj.latitude, mapObj.longitude], mapObj.zoom); // Adjust the zoom level as needed
+  _map._appId = mapObj.id;
+  _map._title = mapObj.title;
+  _map._description = mapObj.description;
 
   // Add a tile layer
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -108,8 +113,23 @@ const buildMap = async(position, mapId) => {
     renderPinsToMap(_info.markerInfo, _map);
   }
 
+  populateMapForm(mapObj);
+
   // add event
   _map.on('click', onMapClickHandler);
+};
+
+const populateMapForm = (mapObj) => {
+  const $mapForm = $("#mapInfo");
+  const $mapTitle = $mapForm.find("input[name='title']");
+  const $mapDescription = $mapForm.find("input[name='description']");
+  const $mapPhotoURL = $mapForm.find("input[name='thumbnail_photo']");
+  $mapTitle.val(mapObj.title);
+  $mapDescription.val(mapObj.description);
+  $mapPhotoURL.val(mapObj.thumbnail_photo);
+  console.log(`img??? ${mapObj.thumbnail_photo}`);
+  
+  $("img.map-thumbnail").attr("src", mapObj.thumbnail_photo);  
 };
 
 // function is called after database-functions.js getPinsForMap
@@ -139,12 +159,13 @@ const updateMarkerInfo = () => {
   const _markerForm = $("#markerInfo");
   _markerObj.id = _markerForm.find("input[name='id']").val();
   _markerObj.title = _markerForm.find("input[name='title']").val();
-  _markerObj.description = _markerForm.find("input[name='description'").val();
+  _markerObj.description = _markerForm.find("input[name='description']").val();
+
   for (const marker in _map._layers) {
     if (_map._layers[marker] instanceof L.Marker && _map._layers[marker]._id == _markerObj.id) {
       console.log("I'm in here.");
       _map._layers[marker]._title = _markerObj.title;
-      _map._layers[marker]._description = _markerObj.description;      
+      _map._layers[marker]._description = _markerObj.description;
     }
   }
 }
@@ -153,29 +174,44 @@ const saveMap = async() => {
   const _map = $("#map")[0]._leaflet_map;
   const _mapCoords = _map.getCenter();
   const _mapZoom = _map.getZoom();
+  const $mapForm = $("#mapInfo");
+  const mapTitle = $mapForm.find("input[name='title']").val();
+  const mapDescription = $mapForm.find("input[name='description']").val();
+  const mapThumbnailPhoto = $mapForm.find("input[name='thumbnail_photo']").val();
   const mapInfo = {
     id: _map._appId,
-    title: _map._title,
-    description: _map._description,
+    title: mapTitle,
+    description: mapDescription,
+    thumbnail_photo: mapThumbnailPhoto,
     latitude: _mapCoords.lat,
     longitude: _mapCoords.lng,
     zoom: _mapZoom
   };
   const markerInfo = getAllMarkers(_map);
   try {
-    const response = await db_helpers.editMapInfo({ mapInfo, markerInfo });
+    let response;
+    if (mapInfo.id > 0) {
+      response = await db_helpers.editMapInfo({ mapInfo, markerInfo });
+    } else {
+      // const $mapForm = $("#mapInfo");
+      // mapInfo.title = $mapForm.find("input[name='title']").val();
+      // mapInfo.description = $mapForm.find("input[name='description']").val();
+      response = await db_helpers.addMap({ mapInfo, markerInfo });      
+    }
     console.log(response);
   }
   catch(err) {
     console.log(err);
-  }  
+  }
+  populateMapForm(mapInfo);
 };
 
 const getAllMarkers = (map) => {
   let allMarkers = [];
-  for (const info in map._layers) {
-    if (map._layers[info] instanceof L.Marker) { // is a marker
+  for (const info in map._layers) {    
+    if (map._layers[info] instanceof L.Marker) { // is a marker      
       const _marker = map._layers[info];
+      console.log(_marker);
       allMarkers.push({
         id: _marker._id,
         map_id: map._appId,

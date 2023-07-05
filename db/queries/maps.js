@@ -87,7 +87,7 @@ const getTopMaps = function (userId, limit) {
 ///////////////////////////////
 
 // insert new map
-const addMap = function(map) {
+const addMap = async function(map) {
   const queryString = `
   INSERT INTO maps (
     user_id,
@@ -126,7 +126,7 @@ const addMap = function(map) {
 ////        UPDATE         ////
 ///////////////////////////////
 
-const updateMap = function (mapId, updates) {
+const updateMap = async function (mapId, updates) {
   // console.log("made it in here");
   const columns = [];
   const values = [];

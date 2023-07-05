@@ -22,6 +22,17 @@ const db_helpers = {
       dataType: 'json'
     });
   },
+  addMap: async (mapInfoObj) => {
+    return db_helpers.ajaxRequestWrapper({
+      url: `http://localhost:3000/maps/`,
+      type: 'POST',
+      data: {
+        mapInfo: mapInfoObj.mapInfo,
+        markerInfo: mapInfoObj.markerInfo
+      },
+      dataType: 'json'
+    });
+  },
   ajaxRequestWrapper: async(options) => {
     /*
     options {

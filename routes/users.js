@@ -87,7 +87,7 @@ router.delete('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  getUserWithId(1) //auto-login as user 1
+  userQueries.getUserWithId(1) //auto-login as user 1
     .then((result) => {
       if (result) {
         req.session["user_id"] = result["id"];

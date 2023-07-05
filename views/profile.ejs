@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Profile</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <%- include('partials/_head') %>
+    <style>
+      .table thead th {
+        width: 33.33%;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/_nav-bar') %>
+    <div class="container">
+      <div class="row" id="user_info">
+        <div class="row" id="profile_picture">
+          <figure class="figure">
+            <!-- Placeholder profile picture -->
+            <img src="https://cfvod.kaltura.com/p/2531481/sp/253148100/thumbnail/entry_id/1_krfvfigu/version/100011/width/478/height/269/type/3/width/478/height/269/type/3/quality/100" class="figure-img img-fluid rounded">
+          </figure>
+        </div>
+        <div class="row" id="username">
+          <%= username %>
+        </div>
+      </div>
+      <div class="col" id="top_map">
+      </div>
+      <div class="col md-6" id="users_maps">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Description</th>
+              <th scope="col">Favorites</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td colspan="2">Larry the Bird</td>
+              <td>@twitter</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col md-6" id="favorite_maps">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Last Edited</th>
+              <th scope="col">Title</th>
+              <th scope="col">Description</th>
+              <th scope="col">Favorites</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td colspan="2">Larry the Bird</td>
+              <td>@twitter</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

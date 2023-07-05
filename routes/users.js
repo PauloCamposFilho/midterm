@@ -16,20 +16,23 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  /* const userId = req.params.id;
+  const userId = req.params.id;
   getUserWithId(userId)
     .then((user) => {
       if (user) {
-        const templateVars = {}; // template variables tbd
-        res.render("userProfile", templateVars); //userProfile is stand-in for correct view
+        const templateVars = {
+          userId,
+          username: user["username"],
+          profile_picture: user["profile_picture"]
+        }; // template variables tbd
+        res.render("profile", templateVars); //userProfile is stand-in for correct view
       } else {
         res.status(404).send("User not found.");
       }
     })
     .catch((err) => {
       console.log(err.message);
-    }); */
-  res.status(404).send("Not Yet Implemented.");
+    });
 });
 
 // update user info

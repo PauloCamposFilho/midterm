@@ -20,7 +20,7 @@ router.get('/:id', async (req, res) => {
   const _mapId = req.params.id;
   const templateVars = {};
   templateVars.mapId = _mapId;
-  templateVars.user = req.session["user_id"];
+  templateVars.userId = req.session["user_id"];
   try {
     templateVars.users = await userQueries.getAllUsers();
     console.log(templateVars);

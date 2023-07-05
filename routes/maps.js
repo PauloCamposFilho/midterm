@@ -49,7 +49,7 @@ router.post('/', async (req, res) => {
         const _markerObj = objHelpers.buildMarkerObjectFromMarkerInfo(req.body.markerInfo[pin], _mapObj.id);
         const insertPinResponse = await pinQueries.addPin(_markerObj);
       }
-      return res.status(200).send("Map and Pin information created.");
+      return res.status(200).send({ mapId: _mapObj.id, statusCode: 200, message: "Map and Pin information edited"});
     }
     catch(err) {
       return res.status(500).send(err.message);

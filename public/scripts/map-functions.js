@@ -28,7 +28,7 @@ const onMapClickHandler = (event) => {
   const _map = event.target;
   let marker = new L.Marker(event.latlng, {draggable:true});
   marker._title = Math.random();
-  marker._description = (Math.random() + 1).toString(36).substring(7);  
+  marker._description = (Math.random() + 1).toString(36).substring(7);
   _map.addLayer(marker);
   marker._id = marker._leaflet_id;
   console.log(_map.getContainer());
@@ -54,8 +54,7 @@ const initMap = () => {
 
 const buildMap = async(position, mapId) => {
 
-  // define map variables.  
-  let zoom = 15;
+  // define map variables.
   let _info;
 
   const mapObj = {
@@ -85,17 +84,16 @@ const buildMap = async(position, mapId) => {
       mapObj.zoom = _info.mapInfo.zoom;
       mapObj.title = _info.mapInfo.title || "";
       mapObj.description = _info.mapInfo.description || "";
-      mapObj.thumbnail_photo = _info.mapInfo.thumbnail_photo;    
-    }
-    catch(err) {
+      mapObj.thumbnail_photo = _info.mapInfo.thumbnail_photo;
+    } catch (err) {
       console.log(err);
       console.log(_info);
       return;
     }
-    console.log(_info);    
+    console.log(_info);
   }
 
-  // Create a map centered at the current position 
+  // Create a map centered at the current position
 
   const _map = L.map('map').setView([mapObj.latitude, mapObj.longitude], mapObj.zoom); // Adjust the zoom level as needed
   _map._appId = mapObj.id;
@@ -128,8 +126,8 @@ const populateMapForm = (mapObj) => {
   $mapDescription.val(mapObj.description);
   $mapPhotoURL.val(mapObj.thumbnail_photo);
   console.log(`img??? ${mapObj.thumbnail_photo}`);
-  
-  $("img.map-thumbnail").attr("src", mapObj.thumbnail_photo);  
+
+  $("img.map-thumbnail").attr("src", mapObj.thumbnail_photo);
 };
 
 // function is called after database-functions.js getPinsForMap
@@ -162,13 +160,13 @@ const updateMarkerInfo = () => {
   _markerObj.description = _markerForm.find("input[name='description']").val();
 
   for (const marker in _map._layers) {
-    if (_map._layers[marker] instanceof L.Marker && _map._layers[marker]._id == _markerObj.id) {
+    if (_map._layers[marker] instanceof L.Marker && _map._layers[marker]._id === _markerObj.id) {
       console.log("I'm in here.");
       _map._layers[marker]._title = _markerObj.title;
       _map._layers[marker]._description = _markerObj.description;
     }
   }
-}
+};
 
 const saveMap = async() => {
   const _map = $("#map")[0]._leaflet_map;
@@ -192,15 +190,14 @@ const saveMap = async() => {
     let response;
     if (mapInfo.id > 0) {
       response = await db_helpers.editMapInfo({ mapInfo, markerInfo });
-    } else {
-      // const $mapForm = $("#mapInfo");
-      // mapInfo.title = $mapForm.find("input[name='title']").val();
-      // mapInfo.description = $mapForm.find("input[name='description']").val();
-      response = await db_helpers.addMap({ mapInfo, markerInfo });      
+    } else {      
+      response = await db_helpers.addMap({ mapInfo, markerInfo });
+      if (response.mapId) {
+        window.location.href = `${window.location.origin}/maps/${response.mapId}`;
+      }
     }
     console.log(response);
-  }
-  catch(err) {
+  } catch (err) {
     console.log(err);
   }
   populateMapForm(mapInfo);
@@ -208,8 +205,8 @@ const saveMap = async() => {
 
 const getAllMarkers = (map) => {
   let allMarkers = [];
-  for (const info in map._layers) {    
-    if (map._layers[info] instanceof L.Marker) { // is a marker      
+  for (const info in map._layers) {
+    if (map._layers[info] instanceof L.Marker) { // is a marker
       const _marker = map._layers[info];
       console.log(_marker);
       allMarkers.push({

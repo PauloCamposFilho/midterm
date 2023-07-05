@@ -27,10 +27,12 @@ const getMapsFromUser = function(userId, limit) {
   const queryParams = [];
   queryParams.push(userId);
   let queryString = `
-  SELECT maps.*
+  SELECT maps.*, count(favorites.*) as favorites
   FROM maps
-  JOIN users ON user_id = users.id
-  WHERE user_id = $1
+  JOIN users ON maps.user_id = users.id
+  JOIN favorites ON maps.user_id = favorites.user_id
+  WHERE maps.user_id = $1
+  GROUP BY maps.id
   ORDER BY last_edit DESC
   `;
   if (limit) {
@@ -51,7 +53,7 @@ const getMapsFromUser = function(userId, limit) {
 const getTopMaps = function (userId, limit) {
   const queryParams = [];
   let queryString = `
-  SELECT maps.*, count(favorites.*)
+  SELECT maps.*, count(favorites.*) as favorites
   FROM favorites
   JOIN maps ON favorites.map_id = maps.id
   JOIN users ON favorites.user_id = users.id

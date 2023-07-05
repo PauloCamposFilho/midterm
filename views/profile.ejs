@@ -28,67 +28,57 @@
       </div>
       <div class="col" id="top_map">
       </div>
+      <% if (topMaps.map(map => map["favorites"]).filter(count => count > 0).length) { %>
       <div class="col md-6" id="user_maps">
         <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Thumbnail</th>
               <th scope="col">Title</th>
-              <th scope="col">Description</th>
               <th scope="col">Favorites</th>
             </tr>
           </thead>
           <tbody>
+            <% for (const [i, map] of topMaps.entries()) { %>
             <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
+              <th scope="row"><%= i+1 %></th>
+              <td>
+                <img src="<%= map.thumbnail_photo %>" class="img-thumbnail">
+              </td>
+              <td><%= map["title"] %></td>
+              <td><%= map["favorites"] %></td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td colspan="2">Larry the Bird</td>
-              <td>@twitter</td>
-            </tr>
+            <% } %>
           </tbody>
         </table>
       </div>
+      <% } %>
+      <% if (userMaps) { %>
       <div class="col md-6" id="favorite_maps">
         <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col">Last Edited</th>
+              <th scope="col">Thumbnail</th>
               <th scope="col">Title</th>
-              <th scope="col">Description</th>
               <th scope="col">Favorites</th>
             </tr>
           </thead>
           <tbody>
+            <% for (const map of userMaps) { %>
             <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
+              <th scope="row"><%= map["last_edit"] %></th>
+              <td>
+                <img src="<%= map.thumbnail_photo %>" class="img-thumbnail">
+              </td>
+              <td><%= map["title"] %></td>
+              <td><%= map["favorites"] %></td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td colspan="2">Larry the Bird</td>
-              <td>@twitter</td>
-            </tr>
+            <% } %>
           </tbody>
         </table>
+        <% } %>
       </div>
     </div>
   </body>

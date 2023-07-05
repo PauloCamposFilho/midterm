@@ -6,7 +6,7 @@ const db = require('../connection');
 ///////////////////////////////
 
 // fetch pins for a map given its id
-const getAllPinsForMap = function(mapId) {
+const getAllPinsForMap = async function(mapId) {
   return db
     .query(`
     SELECT *

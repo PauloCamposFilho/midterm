@@ -6,7 +6,7 @@ const db = require('../connection');
 ///////////////////////////////
 
 // fetch a map given its id
-const getMapWithID = function(mapId) {
+const getMapWithID = async function(mapId) {
   return db
     .query(`
     SELECT *

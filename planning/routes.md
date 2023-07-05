@@ -2,10 +2,13 @@
 
 ## Users
 * GET /users
-* GET /users/:id    (for profile / login)
+* GET /users/:id    (for profile)
 * PATCH /users/:id  (profile updates)
 * DELETE /users/:id
-* POST /users
+* POST /users       (using this for dummy login route)
+
+## Logout
+* GET /logout       (logs user out)
 
 ## Maps
 * GET /maps

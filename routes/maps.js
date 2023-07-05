@@ -14,6 +14,7 @@ const objHelpers = require("../helpers/objectBuilder");
 router.get('/', (req, res) => {
   res.status(404).send("Not Yet Implemented.");
 });
+
 router.get('/:id', (req, res) => {
   const _mapId = req.params.id;
   const templateVars = {};
@@ -24,6 +25,7 @@ router.get('/:id', (req, res) => {
     return res.status(500).send("Malformed request. No mapId given.");
   }
 });
+
 router.get('/:id/info', async (req, res) => {
   const _mapId = req.params.id;  
   try {
@@ -47,6 +49,7 @@ router.post('/', async (req, res) => {
         const _markerObj = objHelpers.buildMarkerObjectFromMarkerInfo(req.body.markerInfo[pin], _mapObj.id);
         const insertPinResponse = await pinQueries.addPin(_markerObj);
       }
+      return res.status(200).send("Map and Pin information created.");
     }
     catch(err) {
       return res.status(500).send(err.message);
@@ -78,6 +81,7 @@ router.patch('/:id', async (req, res) => {
     res.status(400).send("Malformed request. Missing map/marker info");
   }
 });
+
 router.delete('/:id', (req, res) => {
   // res.render('users');
   res.status(404).send("Not Yet Implemented.");

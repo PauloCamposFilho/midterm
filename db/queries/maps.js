@@ -31,17 +31,16 @@ const getMapsFromUser = function(userId, limit) {
   FROM maps
   JOIN users ON user_id = users.id
   WHERE user_id = $1
+  ORDER BY last_edit DESC
   `;
   if (limit) {
     queryParams.push(limit);
     queryString += `LIMIT $${queryParams.length}`;
   }
-  queryString += `
-  ORDER BY last_edit DESC`;
   return db
-    .query(queryString, [userId])
+    .query(queryString, queryParams)
     .then((result) => {
-      return result.rows[0];
+      return result.rows;
     })
     .catch((err) => {
       console.log(err.message);
@@ -72,7 +71,7 @@ const getTopMaps = function (userId, limit) {
     queryString += `LIMIT 5`;
   }
   return db
-    .query(queryString, [limit])
+    .query(queryString, queryParams)
     .then((result) => {
       return result.rows;
     })

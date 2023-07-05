@@ -6,7 +6,9 @@
  */
 
 const express = require('express');
-const { getUserWithId, updateUser, getUserWithEmail } = require('../db/queries/users');
+const userQueries = require("../db/queries/users");
+const mapQueries = require('../db/queries/maps');
+const pinQueries = require("../db/queries/pins");
 const router  = express.Router();
 
 // I'm not sure what this route looks like. Maybe an index of users, formatted like a leaderboard?
@@ -15,24 +17,24 @@ router.get('/', (req, res) => {
   res.status(404).send("Not Yet Implemented.");
 });
 
-router.get('/:id', (req, res) => {
-  const userId = req.params.id;
-  getUserWithId(userId)
-    .then((user) => {
-      if (user) {
-        const templateVars = {
-          userId,
-          username: user["username"],
-          profile_picture: user["profile_picture"]
-        }; // template variables tbd
-        res.render("profile", templateVars); //userProfile is stand-in for correct view
-      } else {
-        res.status(404).send("User not found.");
-      }
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+router.get('/:id', async (req, res) => {
+  const _userId = req.params.id;
+  const templateVars = {};
+  templateVars.userId = _userId;
+  console.log(_userId);
+  try {
+    templateVars.userInfo = await userQueries.getUserWithId(_userId);
+    templateVars.userMaps = await mapQueries.getMapsFromUser(_userId, 5);
+    templateVars.topMaps = await mapQueries.getTopMaps(_userId, 5);
+    console.log(templateVars)
+    if (_userId) {
+      return res.status(200).render("profile", templateVars);
+    } else {
+      return res.status(500).send("Malformed request. No userId given.");
+    }
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
 });
 
 // update user info

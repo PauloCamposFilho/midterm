@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <%- include('partials/_head') %>
+    <!-- Forcing tables to share columns widths, to be moved to dedicated css file later -->
     <style>
       .table thead th {
         width: 33.33%;
@@ -22,12 +23,12 @@
           </figure>
         </div>
         <div class="row" id="username">
-          <%= username %>
+          <%= userInfo["username"] %>
         </div>
       </div>
       <div class="col" id="top_map">
       </div>
-      <div class="col md-6" id="users_maps">
+      <div class="col md-6" id="user_maps">
         <table class="table table-hover">
           <thead>
             <tr>

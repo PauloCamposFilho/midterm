@@ -15,12 +15,15 @@ router.post('/', async (req, res) => {
   const userId = req.session["user_id"];
   const mapId = req.body["mapId"];
   const newEditor = req.body["editorId"];
+  console.log("Made it to POST /editors")
+  console.log(req.body);
   if (!userId || !mapId || !newEditor) {
     return res.status(400).send("Malformed request. Missing parameters");
   }
   try {
-    const mapOwnerId = await mapQueries.getMapWithID(mapId).user_id;
-    if (mapOwnerId === userId) {
+    console.log("In the TRY block");
+    const _mapInfo = await mapQueries.getMapWithID(mapId);
+    if (_mapInfo.user_id === userId) {
       const addEditorResponse = await editorQueries.addEditor(mapId, newEditor);
       const editorUser = await userQueries.getUserWithId(newEditor);
       return res.status(200).send({ user: editorUser, statusCode: 200 });

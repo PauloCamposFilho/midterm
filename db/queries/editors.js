@@ -30,9 +30,9 @@ const getAllEditorsForMap = function(mapId) {
 // insert a new favorite
 const addEditor = async function(mapId, userId) {
   const queryString = `
-  INSERT INTO favorites (
+  INSERT INTO editors (
     map_id,
-    user_id,
+    user_id
   )
   VALUES ($1, $2)
   RETURNING *
@@ -48,6 +48,7 @@ const addEditor = async function(mapId, userId) {
     })
     .catch((err) => {
       console.log(err.message);
+      throw new Error(err);
     });
 };
 

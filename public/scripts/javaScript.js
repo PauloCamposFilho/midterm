@@ -14,12 +14,18 @@ $(document).ready(function() {
     $(".addEditor").prop("disabled", false);
   }).trigger("change");
   $(".addEditor").click(async function(event) {
+    console.log("I'm in here... adding editor");
     if ($(this).prop("disabled") === true) {
       return;
     } else {
-      const mapId = $("#map").attr("data-mapId");
-      const editorId = Number($("#mapEditors").val());
-      const response = await db_helpers.addEditorToMap(mapId, editorId);
+      try {
+        const mapId = $("#map").attr("data-mapId");
+        const editorId = Number($("#mapEditors").val());
+        const response = await db_helpers.addEditorToMap(mapId, editorId);
+        console.log(response);
+      } catch (err) {
+        console.log(err);
+      }
     }
   });
 });

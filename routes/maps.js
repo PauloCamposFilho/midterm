@@ -14,8 +14,19 @@ const editorQueries = require("../db/queries/editors");
 const favoriteQueries = require("../db/queries/favorites");
 const objHelpers = require("../helpers/objectBuilder");
 
-router.get('/', (req, res) => {
-  res.status(404).send("Not Yet Implemented.");
+router.get('/', async (req, res) => {
+  const templateVars = {};
+  try {
+    if (req.session.user_id) {
+      templateVars.userId = req.session.user_id;
+      templateVars.user = await userQueries.getUserWithId(templateVars.userId);
+      templateVars.userMaps = await queries.getMapsFromUser(templateVars.userId);
+    }
+    templateVars.maps = await queries.getTopMaps(null, 5);
+    return res.render("maps", templateVars);
+  } catch (err) {
+    return res.status(500).send({ statusCode: 500, message: err.message });
+  }
 });
 
 router.get('/:id', async (req, res) => {

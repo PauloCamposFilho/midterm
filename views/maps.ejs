@@ -28,19 +28,18 @@
     <div class="container">
       <div class="row">
         <header class="col border rounded" id="user_info">
-          <div class="row" id="profile_picture">
-              <!-- Placeholder profile picture -->
-              <img src="https://cfvod.kaltura.com/p/2531481/sp/253148100/thumbnail/entry_id/1_krfvfigu/version/100011/width/478/height/269/type/3/width/478/height/269/type/3/quality/100" class="img-fluid rounded">
-          </div>
-          <div class="row fs-1 justify-content-center" id="username">
-            <%= userInfo["username"] %>
-          </div>
+          <div class="row">
+            <h1>Welcome to Wikimaps!</h1>
+            <p>Here you'll find the latest crowdsourced mappings to all things awesome around you!</p>
+          </div>          
         </header>
-        <div class="col-8">
+      </div>
+      <div class="row">
+        <div class="col-12">
           <div class="row" id="top_map">
           </div>
           <!-- check whether user has any maps with favorites before building top maps table -->
-          <% if (topMaps.map(map => map["favorites"]).filter(count => count > 0).length) { %>
+          <% if (maps && maps.length > 0) { %>
           <div class="row" id="user_maps">
             <table class="table table-sm table-hover">
               <thead>
@@ -52,7 +51,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% for (const [i, map] of topMaps.entries()) { %>
+                <% for (const [i, map] of maps.entries()) { %>
                 <tr data-mapId="<%= map.id %>">
                   <th scope="row"><%= i+1 %></th>
                   <td>
@@ -66,7 +65,11 @@
             </table>
           </div>
           <% } %>
-          <% if (userMaps) { %>
+          <% if (userMaps && user) { %>
+          <div class="row">
+            <h4>Hey, <%= user.username %>!</h4>
+            <h6>Don't forget to check out activity on your maps.</h6>
+          </div>
           <div class="row" id="favorite_maps">
             <table class="table table-sm table-hover">
               <thead>

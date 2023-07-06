@@ -52,13 +52,12 @@ router.get('/:id', async (req, res) => {
     const mapInfo = await queries.getMapWithID(_mapId);
     if (mapInfo) {
       mapInfo.editors = await editorQueries.getAllEditorsForMap(_mapId);
-      templateVars.userIsEditor = mapInfo.editors.some((editors) => { return editors.id ===  _userId });
       templateVars.userOwnsMap = templateVars.userId === mapInfo.user_id;
+      templateVars.userCanEdit = mapInfo.editors.some((editors) => { return editors.id ===  templateVars.userId }) || templateVars.userOwnsMap;
       const currentUserFavoriteMaps = await favoriteQueries.getAllFavoritesForUser(templateVars.userId);
       mapInfo.isUserFavorite = currentUserFavoriteMaps.some((maps) => { return maps.id === Number(_mapId); });
     }
     templateVars.mapInfo = mapInfo;
-    console.log(mapInfo);
     return res.status(200).render("map", templateVars);
   } catch(err) {
     return res.status(500).send(err.message);

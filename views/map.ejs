@@ -55,13 +55,13 @@
     <% } %>
         <div class="favorite-container">
           <% if (mapInfo && mapInfo.favorite_count > 0) { %>
+            <span><i class="fa fa-heart favorite-indicator 
             <% if (mapInfo.isUserFavorite) { %>
-              <span><i class="fa fa-heart favorite-indicator favorited removeFavorite" data-mapId="<%= mapId %>"></i> This is one of your favorite maps! It has been favorited a total of <%= mapInfo.favorite_count %> times! </span>              
+              favorited removeFavorite 
             <% } else { %>
-              <span><i class="fa fa-heart favorite-indicator addFavorite" data-mapId="<%= mapId %>"></i> This map has been favorited <%= mapInfo.favorite_count %> times! </span>
-            <% } %>
-          <% } else { %>
-            <span><i class="fa fa-heart favorite-indicator addFavorite" data-mapId="<%= mapId %>"></i> No one has favorited this map yet. Be the first! </span>
+              addFavorite 
+            <% } %>" data-mapId="<%= mapId %>">
+          </i><span class="favorite-count"> <%= mapInfo.favorite_count %> </span>
           <% } %>
         </div>
       </div>

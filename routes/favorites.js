@@ -28,12 +28,15 @@ router.post('/', async (req, res) => {
 router.delete("/", async (req, res) => {
   const userId = req.session.user_id;
   const mapId = req.body.mapId;
-  if (!userId || mapId) { // user not logged in
+  if (!userId || !mapId) { // user not logged in
     return res.status(400).send("Malformed request. Missing parameters.");
   }
   try {
+    console.log("In the delete path.");
+    console.log(req.body);
+    console.log(mapId, userId);
     const removeFavoriteResponse = await favoriteQueries.deleteFavorite(mapId, userId);
-    return res.status(200).send({ statusCode: 200, message: "Map has been favorited successfully." });
+    return res.status(200).send({ statusCode: 200, message: "Favorite removed successfully." });
   } catch (err) {
     return res.status(500).send({ statusCode: 500, message: err.message});
   }

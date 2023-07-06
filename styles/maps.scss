@@ -16,6 +16,9 @@
   justify-content: flex-start;
 }
 .favorite-indicator {
+  color: black;
+}
+.favorite-indicator.favorited {
   color: #e52e2e;
 }
 .favorite-indicator:hover {

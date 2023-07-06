@@ -1,5 +1,6 @@
 const favoriteClickHandler = async ($sender) => {
-  const _mapId = $sender.attr("data-mapId");    
+  const _mapId = $sender.attr("data-mapId");
+  let _currentNumFavorites = Number($(".favorite-count").text());
   if ($sender.hasClass("favorited")) { // user has favorited this map.
     try {
       const deleteFavoriteMap = await db_helpers.removeFavoriteMap(_mapId);
@@ -9,7 +10,8 @@ const favoriteClickHandler = async ($sender) => {
         backdrop: true,
         centerVertical: true
       });
-      return;      
+      _currentNumFavorites--;
+      $sender.removeClass("favorited");
     } catch (err) {
       bootbox.alert({
         title: 'Wikimaps',
@@ -27,6 +29,8 @@ const favoriteClickHandler = async ($sender) => {
         backdrop: true,
         centerVertical: true
       });
+      _currentNumFavorites++;
+      $sender.addClass("favorited");
     } catch (err) {
       bootbox.alert({
         title: 'Wikimaps',
@@ -35,4 +39,6 @@ const favoriteClickHandler = async ($sender) => {
       });
     }
   }
+  console.log("currentFavorites", _currentNumFavorites);
+  $(".favorite-count").text(_currentNumFavorites);
 };

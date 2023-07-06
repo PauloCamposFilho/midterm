@@ -50,3 +50,8 @@ const editorAddEventHandler = async ($button) => {
     }
   }
 };
+
+$(document).ready(function() {
+  $(".addEditor").click(function () { editorAddEventHandler($(this)) });
+  $(".removeEditor").click(function () { editorDeleteEventHandler($(this)) });
+});

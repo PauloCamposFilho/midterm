@@ -38,7 +38,10 @@ const favoriteClickHandler = async ($sender) => {
         centerVertical: true
       });
     }
-  }
-  console.log("currentFavorites", _currentNumFavorites);
+  }  
   $(".favorite-count").text(_currentNumFavorites);
 };
+
+$(document).ready(function() {
+  $(".favorite-indicator").click(function() { favoriteClickHandler($(this)) });
+});

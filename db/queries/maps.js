@@ -30,10 +30,10 @@ const getMapsFromUser = function(userId, limit) {
   const queryParams = [];
   queryParams.push(userId);
   let queryString = `
-  SELECT maps.*, count(favorites.*) as favorites
+  SELECT maps.*, count(favorites.id) as favorites
   FROM maps
   JOIN users ON maps.user_id = users.id
-  JOIN favorites ON maps.user_id = favorites.user_id
+  LEFT JOIN favorites ON maps.id = favorites.map_id
   WHERE maps.user_id = $1
   GROUP BY maps.id
   ORDER BY last_edit DESC

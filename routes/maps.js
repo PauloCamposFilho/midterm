@@ -14,6 +14,10 @@ const editorQueries = require("../db/queries/editors");
 const favoriteQueries = require("../db/queries/favorites");
 const objHelpers = require("../helpers/objectBuilder");
 
+router.get("/new", (req, res) => {
+  res.redirect("/maps/0");
+});
+
 router.get('/', async (req, res) => {
   const templateVars = {};
   templateVars.userId = req.session.user_id;
@@ -49,9 +53,6 @@ router.get('/:id', async (req, res) => {
       mapInfo.editors = await editorQueries.getAllEditorsForMap(_mapId);
       templateVars.userOwnsMap = templateVars.userId === mapInfo.user_id;
       const currentUserFavoriteMaps = await favoriteQueries.getAllFavoritesForUser(templateVars.userId);
-      // console.log("---- userfavoritemaps ----");
-      // console.log(currentUserFavoriteMaps);
-      // console.log("---- end of userfavoritemaps ----");
       mapInfo.isUserFavorite = currentUserFavoriteMaps.some((maps) => { return maps.id === Number(_mapId); });
     }
     templateVars.mapInfo = mapInfo;

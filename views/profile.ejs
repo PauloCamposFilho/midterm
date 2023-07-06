@@ -10,75 +10,86 @@
       .table thead th {
         width: 33.33%;
       }
+      #profile_picture {
+        max-width: 500px;
+        max-height: 500px;
+      }
+      .map-thumbnail {
+        max-width: 200px;
+        max-height: 200px;
+      }
     </style>
   </head>
   <body>
     <%- include('partials/_nav-bar') %>
     <div class="container">
-      <div class="row" id="user_info">
-        <div class="row" id="profile_picture">
-          <figure class="figure">
-            <!-- Placeholder profile picture -->
-            <img src="https://cfvod.kaltura.com/p/2531481/sp/253148100/thumbnail/entry_id/1_krfvfigu/version/100011/width/478/height/269/type/3/width/478/height/269/type/3/quality/100" class="figure-img img-fluid rounded">
-          </figure>
-        </div>
-        <div class="row" id="username">
-          <%= userInfo["username"] %>
-        </div>
-      </div>
-      <div class="col" id="top_map">
-      </div>
-      <% if (topMaps.map(map => map["favorites"]).filter(count => count > 0).length) { %>
-      <div class="col md-6" id="user_maps">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Thumbnail</th>
-              <th scope="col">Title</th>
-              <th scope="col">Favorites</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for (const [i, map] of topMaps.entries()) { %>
-            <tr>
-              <th scope="row"><%= i+1 %></th>
-              <td>
-                <img src="<%= map.thumbnail_photo %>" class="img-thumbnail">
-              </td>
-              <td><%= map["title"] %></td>
-              <td><%= map["favorites"] %></td>
-            </tr>
+      <div class="row">
+        <header class="col border rounded" id="user_info">
+          <div class="row" id="profile_picture">
+              <!-- Placeholder profile picture -->
+              <img src="https://cfvod.kaltura.com/p/2531481/sp/253148100/thumbnail/entry_id/1_krfvfigu/version/100011/width/478/height/269/type/3/width/478/height/269/type/3/quality/100" class="img-fluid rounded">
+          </div>
+          <div class="row fs-1 justify-content-center" id="username">
+            <%= userInfo["username"] %>
+          </div>
+        </header>
+        <div class="col-8">
+          <div class="row" id="top_map">
+          </div>
+          <!-- check whether user has any maps with favorites before building top maps table -->
+          <% if (topMaps.map(map => map["favorites"]).filter(count => count > 0).length) { %>
+          <div class="row" id="user_maps">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Thumbnail</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Favorites</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (const [i, map] of topMaps.entries()) { %>
+                <tr>
+                  <th scope="row"><%= i+1 %></th>
+                  <td>
+                    <img src="<%= map.thumbnail_photo %>" class="map-thumbnail img-fluid img-thumbnail">
+                  </td>
+                  <td><%= map["title"] %></td>
+                  <td><%= map["favorites"] %></td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+          <% } %>
+          <% if (userMaps) { %>
+          <div class="row" id="favorite_maps">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Last Edited</th>
+                  <th scope="col">Thumbnail</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Favorites</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (const map of userMaps) { %>
+                <tr>
+                  <th scope="row"><%= map["last_edit"] %></th>
+                  <td>
+                    <img src="<%= map.thumbnail_photo %>" class="map-thumbnail img-fluid img-thumbnail">
+                  </td>
+                  <td><%= map["title"] %></td>
+                  <td><%= map["favorites"] %></td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
             <% } %>
-          </tbody>
-        </table>
-      </div>
-      <% } %>
-      <% if (userMaps) { %>
-      <div class="col md-6" id="favorite_maps">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Last Edited</th>
-              <th scope="col">Thumbnail</th>
-              <th scope="col">Title</th>
-              <th scope="col">Favorites</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for (const map of userMaps) { %>
-            <tr>
-              <th scope="row"><%= map["last_edit"] %></th>
-              <td>
-                <img src="<%= map.thumbnail_photo %>" class="img-thumbnail">
-              </td>
-              <td><%= map["title"] %></td>
-              <td><%= map["favorites"] %></td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
-        <% } %>
+          </div>
+        </div>
       </div>
     </div>
   </body>

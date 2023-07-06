@@ -16,13 +16,15 @@ const objHelpers = require("../helpers/objectBuilder");
 
 router.get('/', async (req, res) => {
   const templateVars = {};
+  templateVars.userId = req.session.user_id;
+  templateVars.userMaps = 0;
   try {
-    if (req.session.user_id) {
-      templateVars.userId = req.session.user_id;
+    if (templateVars.userId) {
       templateVars.user = await userQueries.getUserWithId(templateVars.userId);
       templateVars.userMaps = await queries.getMapsFromUser(templateVars.userId);
     }
     templateVars.maps = await queries.getTopMaps(null, 5);
+    console.log(templateVars);
     return res.render("maps", templateVars);
   } catch (err) {
     return res.status(500).send({ statusCode: 500, message: err.message });

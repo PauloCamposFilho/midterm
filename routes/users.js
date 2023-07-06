@@ -91,7 +91,7 @@ router.post('/', (req, res) => {
     .then((result) => {
       if (result) {
         req.session["user_id"] = result["id"];
-        return res.redirect("/maps/1"); //redirect to a placeholder map until /maps route completed
+        return res.redirect("/maps"); // new redirect to /maps
       } else {
         res.status(404).send("User not found.");
       }

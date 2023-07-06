@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post('/', (req, res) => {
   req.session["user_id"] = null; // remove the session cookie.
-  res.redirect('/maps/1'); // placeholder. redirects to map 1 for now until we sort the home/index page.
+  res.redirect('/maps'); // new redirect to maps/
 });
 
 module.exports = router;

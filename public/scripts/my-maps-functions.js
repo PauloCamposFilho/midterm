@@ -33,5 +33,8 @@ const deleteMapClickHandler = async ($sender) => {
 };
 
 $(document).ready(function() {
-  $(".deleteMap").click(function() { deleteMapClickHandler($(this)) });
+  $(".deleteMap").click(function(event) {
+    deleteMapClickHandler($(this));
+    event.stopPropagation();
+  });
 });

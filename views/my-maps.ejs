@@ -59,7 +59,7 @@
                     <img src="<%= map.thumbnail_photo %>" class="map-thumbnail img-fluid img-thumbnail">
                   </td>
                   <td><%= map["title"] %></td>
-                  <td><button type="button" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash deleteMap" data-mapId="<%= map.id %>"></i></button></td>
+                  <td><button type="button" class="btn btn-sm btn-danger deleteMap" data-mapId="<%= map.id %>"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 <% } %>
               </tbody>
@@ -73,12 +73,10 @@
       // move to own file later.
       let testObj;
       $(document).ready(function() {
-        $("#user_maps table tbody tr:not('.deleteMap'), #favorite_maps table tbody tr:not('.deleteMap')").on('click', function(e) {
+        $("#user_maps table tbody tr, #favorite_maps table tbody tr").on('click', function(e) {
           testObj = e.target;
-          if (!e.target.classList.contains("deleteMap")) { // didnt click the delete icon.
-            const _mapId = $(this).attr("data-mapId");
-            window.open(`${window.location.origin}/maps/${_mapId}`, '_blank');
-          }
+          const _mapId = $(this).attr("data-mapId");
+          window.open(`${window.location.origin}/maps/${_mapId}`, '_blank');
         });
       });
     </script>

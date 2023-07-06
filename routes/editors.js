@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     }
     return res.status(401).send({ statusCode: 400, message: "Unauthorized. You do not own this map." });
   } catch (err) {
-    return res.status(500).send(err.message);
+    return res.status(500).send({ statusCode: 500, message: err.message });
   }
 });
 

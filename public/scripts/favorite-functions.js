@@ -38,10 +38,13 @@ const favoriteClickHandler = async ($sender) => {
         centerVertical: true
       });
     }
-  }  
+  }
   $(".favorite-count").text(_currentNumFavorites);
 };
 
 $(document).ready(function() {
-  $(".favorite-indicator").click(function() { favoriteClickHandler($(this)) });
+  $(".favorite-indicator").click(function(event) {
+    favoriteClickHandler($(this));
+    event.stopPropagation();
+  });
 });

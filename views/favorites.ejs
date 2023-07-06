@@ -74,12 +74,9 @@
       // move to own file later.
       let testObj;
       $(document).ready(function() {
-        $("#user_maps table tbody tr:not('.favorite-indicator'), #favorite_maps table tbody tr:not('.favorite-indicator')").on('click', function(e) {
-          if (!e.target.classList.contains("favorite-indicator")) { // didnt click the favorite icon.
-            const _mapId = $(this).attr("data-mapId");
-            // window.location.href = `${window.location.origin}/maps/${_mapId}`;
-            window.open(`${window.location.origin}/maps/${_mapId}`, '_blank');            
-          }
+        $("#user_maps table tbody tr, #favorite_maps table tbody tr").on('click', function(e) {
+          const _mapId = $(this).attr("data-mapId");
+          window.open(`${window.location.origin}/maps/${_mapId}`, '_blank');
         });
       });
     </script>

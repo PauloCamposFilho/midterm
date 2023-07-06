@@ -44,7 +44,7 @@ const editorAddEventHandler = async ($button) => {
     } catch (err) {
       bootbox.alert({
         title: 'Wikimaps',
-        message: `There has been an error: ${err}`,
+        message: `There has been an error: ${err.message}`,
         centerVertical: true
       });
     }

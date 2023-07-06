@@ -44,7 +44,7 @@ router.get("/my-maps", async (req, res) => {
   try {
     templateVars.userInfo = await userQueries.getUserWithId(_userId);
     templateVars.userMaps = await mapQueries.getMapsFromUser(_userId, 999999); // I hope to have to change this in the future.
-    return res.status(200).render("favorites", templateVars);
+    return res.status(200).render("my-maps", templateVars);
   } catch (err) {
     return res.status(500).send({ statusCode: 500, message: err.message });
   }

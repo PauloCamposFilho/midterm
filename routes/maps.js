@@ -135,9 +135,22 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', (req, res) => {
-  // res.render('users');
-  res.status(404).send("Not Yet Implemented.");
+router.delete('/:id', async (req, res) => {
+  const _userId = req.session.user_id;
+  const _mapId = req.params.id;
+  if (!_userId || !_mapId) {
+    return res.status(400).send({ statusCode: 400, message: "Bad request." });
+  }
+  try {
+    const mapInfo = await queries.getMapWithID(_mapId);
+    if (!mapInfo.user_id === _userId) { // Unauthorized. Not the map owner.
+      return res.status(401).send({ statusCode: 401, message: "Unauthorized. You don't own this map. "});
+    }
+    const deleteMapResponse = await queries.deleteMap(_mapId);
+    return res.status(200).send({ statusCode: 200, message: "Map deleted successfuly." });
+  } catch(err) {
+    return res.status(500).send({ statusCode: 500, message: err.message });
+  }
 });
 
 module.exports = router;

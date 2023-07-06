@@ -60,7 +60,7 @@
                     <img src="<%= map.thumbnail_photo %>" class="map-thumbnail img-fluid img-thumbnail">
                   </td>
                   <td><%= map["title"] %></td>
-                  <td><i class="fa fa-heart favorite-indicator favorited" data-mapId="<%= map.id %>"> </td>
+                  <td><button class="btn btn-sm btn-info"><i class="fa fa-heart favorite-indicator favorited" data-mapId="<%= map.id %>"></i></button></td>
                 </tr>
                 <% } %>
               </tbody>

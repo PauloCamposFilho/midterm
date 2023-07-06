@@ -33,6 +33,12 @@ const db_helpers = {
       dataType: 'json'
     });
   },
+  deleteMap: async (mapId) => {
+    return db_helpers.ajaxRequestWrapper({
+      url: `/maps/${mapId}`,
+      type: 'DELETE'
+    });
+  },
   addEditorToMap: async (mapId, editorId) => {
     return db_helpers.ajaxRequestWrapper({
       url: `/editors/`,
@@ -95,7 +101,7 @@ const db_helpers = {
         error: function (xhr, textStatus, error) {
           console.log(xhr);
           console.log(textStatus);
-          console.log(error);   
+          console.log(error);
           reject(xhr.responseJSON);
         }
       });

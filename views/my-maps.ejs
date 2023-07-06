@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <%- include('partials/_head') %>
+    <script src="../scripts/my-maps-functions.js"></script>
     <!-- Forcing tables to share columns widths, to be moved to dedicated css file later -->
     <style>
       .table thead th {
@@ -38,15 +39,16 @@
         </header>
         <div class="col-8">
           <div class="row" id="top_map">
-          </div>          
+          </div>
           <% if (userMaps) { %>
-          <div class="row" id="favorite_maps">
+          <div class="row" id="user_maps">
             <table class="table table-sm table-hover">
               <thead>
                 <tr>
                   <th scope="col">Last Edited</th>
                   <th scope="col">Thumbnail</th>
-                  <th scope="col">Title</th>                  
+                  <th scope="col">Title</th>
+                  <th scope="col"></th>
                 </tr>
               </thead>
               <tbody>
@@ -56,7 +58,8 @@
                   <td>
                     <img src="<%= map.thumbnail_photo %>" class="map-thumbnail img-fluid img-thumbnail">
                   </td>
-                  <td><%= map["title"] %></td>                  
+                  <td><%= map["title"] %></td>
+                  <td><button type="button" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash deleteMap" data-mapId="<%= map.id %>"></i></button></td>
                 </tr>
                 <% } %>
               </tbody>
@@ -68,11 +71,14 @@
     </div>
     <script>
       // move to own file later.
+      let testObj;
       $(document).ready(function() {
-        $("#user_maps table tbody tr, #favorite_maps table tbody tr").on('click', function(e) {
-          const _mapId = $(this).attr("data-mapId");
-          // window.location.href = `${window.location.origin}/maps/${_mapId}`;
-          window.open(`${window.location.origin}/maps/${_mapId}`, '_blank');
+        $("#user_maps table tbody tr:not('.deleteMap'), #favorite_maps table tbody tr:not('.deleteMap')").on('click', function(e) {
+          testObj = e.target;
+          if (!e.target.classList.contains("deleteMap")) { // didnt click the delete icon.
+            const _mapId = $(this).attr("data-mapId");
+            window.open(`${window.location.origin}/maps/${_mapId}`, '_blank');
+          }
         });
       });
     </script>

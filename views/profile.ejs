@@ -18,6 +18,9 @@
         max-width: 200px;
         max-height: 200px;
       }
+      #user_maps table tbody tr, #favorite_maps table tbody tr {
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -50,7 +53,7 @@
               </thead>
               <tbody>
                 <% for (const [i, map] of topMaps.entries()) { %>
-                <tr>
+                <tr data-mapId="<%= map.id %>">
                   <th scope="row"><%= i+1 %></th>
                   <td>
                     <img src="<%= map.thumbnail_photo %>" class="map-thumbnail img-fluid img-thumbnail">
@@ -76,8 +79,8 @@
               </thead>
               <tbody>
                 <% for (const map of userMaps) { %>
-                <tr>
-                  <th scope="row"><%= map["last_edit"] %></th>
+                <tr data-mapId="<%= map.id %>">
+                  <th scope="row"><%= map["last_edit"].toLocaleDateString() %> <%= map["last_edit"].toLocaleTimeString() %></th>
                   <td>
                     <img src="<%= map.thumbnail_photo %>" class="map-thumbnail img-fluid img-thumbnail">
                   </td>
@@ -92,5 +95,13 @@
         </div>
       </div>
     </div>
+    <script>
+      $(document).ready(function() {
+        $("#user_maps table tbody tr, #favorite_maps table tbody tr").on('click', function(e) {
+          const _mapId = $(this).attr("data-mapId");
+          window.location.href = `${window.location.origin}/maps/${_mapId}`;
+        });
+      });
+    </script>
   </body>
 </html>

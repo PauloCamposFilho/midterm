@@ -9,9 +9,12 @@ const db = require('../connection');
 const getMapWithID = function(mapId) {
   return db
     .query(`
-    SELECT *
+    SELECT maps.*, count(favorites.id) as favorite_count
     FROM maps
-    WHERE id = $1
+    LEFT JOIN favorites ON favorites.map_id = maps.id
+    WHERE maps.id = $1
+    GROUP BY
+    maps.id
     `, [mapId])
     .then((result) => {
       return result.rows[0];

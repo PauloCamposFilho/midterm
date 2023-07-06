@@ -1,0 +1,32 @@
+.btn-sm.removeEditor {
+  font-size: 8px;
+}
+#map {
+  height: 800px;
+  width: 75%;
+}
+#markerInfo {
+  display: none;
+}
+.map-container {
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.favorite-indicator {
+  color: #e52e2e;
+}
+.favorite-indicator:hover {
+  font-size: 1.5em;
+  cursor: pointer;
+}
+.favorite-indicator.favorited:hover {
+  font-size: 1.3em;
+  color: black;
+}
+.map-information-container {
+  display: flex;
+  column-gap: 3%;
+}

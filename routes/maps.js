@@ -10,6 +10,8 @@ const router  = express.Router();
 const queries = require('../db/queries/maps');
 const pinQueries = require("../db/queries/pins");
 const userQueries = require("../db/queries/users");
+const editorQueries = require("../db/queries/editors");
+const favoriteQueries = require("../db/queries/favorites");
 const objHelpers = require("../helpers/objectBuilder");
 
 router.get('/', (req, res) => {
@@ -17,20 +19,31 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  const _mapId = req.params.id;  
+  const _mapId = req.params.id;
   const templateVars = {};
   templateVars.mapId = _mapId;
   templateVars.userId = req.session["user_id"];
   templateVars.userOwnsMap = false;
+
+  if (!_mapId) { // no mapId? Shouldnt even be in here.
+    return res.status(500).send("Malformed request. No mapId given.");
+  }
+
   try {
     templateVars.users = await userQueries.getAllUsers();
     const mapInfo = await queries.getMapWithID(_mapId);
-    templateVars.userOwnsMap = templateVars.userId === mapInfo.user_id;    
-    if (_mapId) {
-      return res.status(200).render("map", templateVars);
-    } else {
-      return res.status(500).send("Malformed request. No mapId given.");
+    if (mapInfo) {
+      mapInfo.editors = await editorQueries.getAllEditorsForMap(_mapId);
+      templateVars.userOwnsMap = templateVars.userId === mapInfo.user_id;
+      const currentUserFavoriteMaps = await favoriteQueries.getAllFavoritesForUser(templateVars.userId);
+      // console.log("---- userfavoritemaps ----");
+      // console.log(currentUserFavoriteMaps);
+      // console.log("---- end of userfavoritemaps ----");
+      mapInfo.isUserFavorite = currentUserFavoriteMaps.some((maps) => { return maps.id === Number(_mapId); });
     }
+    templateVars.mapInfo = mapInfo;
+    console.log(mapInfo);
+    return res.status(200).render("map", templateVars);
   } catch(err) {
     return res.status(500).send(err.message);
   }
@@ -58,6 +71,7 @@ router.post('/', async (req, res) => {
     _mapObj.user_id = req.session.user_id; // logged in user created this map.
     try {
       const insertMapResponse = await queries.addMap(_mapObj);
+      const editorInsertResponse = await editorQueries.addEditor(insertMapResponse.id, _mapObj.user_id); // add as editor to own map.
       _mapObj.id = insertMapResponse.id;
       for (const pin in req.body.markerInfo) {
         const _markerObj = objHelpers.buildMarkerObjectFromMarkerInfo(req.body.markerInfo[pin], _mapObj.id);

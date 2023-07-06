@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <%- include('partials/_head') %>
+    <link rel="stylesheet" href="../styles/maps.css">
   </head>
   <body>
     <%- include('partials/_nav-bar') %>
@@ -22,21 +23,47 @@
       </div>
     </div>
     <form id="markerInfo">
-      <input type="number" name="id" placeholder="0" />
+      <input type="hidden" name="id" placeholder="0" />
       <input type="text" name="title" placeholder="Title"/>
       <input type="text" name="description" placeholder="description"/>
       <input type="text" name="latitude" />
       <input type="text" name="longitude" />
+      <input type="text" name="image" placeholder="Image URL">
       <button type="button" id="savePinData">Save Pin</button>
     </form>
+    <div class="map-information-container">
     <% if (userId && mapId > 0 && userOwnsMap) { %>
-      <select id="mapEditors">
-        <option value="0">Select Editor</option>
-        <% for (const user in users) { %>
-          <option value="<%= users[user].id %>"><%= users[user].username %></option>
-        <% } %>
-      </select>
-      <button type="button" class="btn btn-primary addEditor">Add Editor</button>
+        <div>
+          <select id="mapEditors">
+            <option value="0">Select Editor</option>
+            <% for (const user in users) { %>
+              <option value="<%= users[user].id %>"><%= users[user].username %></option>
+            <% } %>
+          </select>
+          <button type="button" class="btn btn-primary addEditor">Add Editor</button>
+        </div>
+      <% } %>
+      <% if (mapInfo && mapInfo.editors.length > 0) { %>
+        <div class="map-editor-list">
+          <ul>
+          <% for (const editor in mapInfo.editors) { %>
+            <li><%= mapInfo.editors[editor].username %><button class="btn btn-sm btn-danger removeEditor" data-editorId="<%= mapInfo.editors[editor].id %>">X</button></li>
+          <% } %>
+          </ul>
+        </div>
+      
     <% } %>
+        <div class="favorite-container">
+          <% if (mapInfo && mapInfo.favorite_count > 0) { %>
+            <% if (mapInfo.isUserFavorite) { %>
+              <span><i class="fa fa-heart favorite-indicator favorited removeFavorite" data-mapId="<%= mapId %>"></i> This is one of your favorite maps! It has been favorited a total of <%= mapInfo.favorite_count %> times! </span>              
+            <% } else { %>
+              <span><i class="fa fa-heart favorite-indicator addFavorite" data-mapId="<%= mapId %>"></i> This map has been favorited <%= mapInfo.favorite_count %> times! </span>
+            <% } %>
+          <% } else { %>
+            <span><i class="fa fa-heart favorite-indicator addFavorite" data-mapId="<%= mapId %>"></i> No one has favorited this map yet. Be the first! </span>
+          <% } %>
+        </div>
+      </div>
   </body>
 </html>

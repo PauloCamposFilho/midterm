@@ -1,19 +1,19 @@
 const db_helpers = {
   getPinsForMap: async(mapId) => {
     return db_helpers.ajaxRequestWrapper({
-      url: `http://localhost:3000/pins/${mapId}`,
+      url: `/pins/${mapId}`,
       type: 'GET'
     });
   },
   getMapInfo: async(mapId) => {
     return db_helpers.ajaxRequestWrapper({
-      url: `http://localhost:3000/maps/${mapId}/info`,
+      url: `/maps/${mapId}/info`,
       type: 'GET'
     });
   },
   editMapInfo: async (mapInfoObj) => {
     return db_helpers.ajaxRequestWrapper({
-      url: `http://localhost:3000/maps/${mapInfoObj.mapInfo.id}`,
+      url: `/maps/${mapInfoObj.mapInfo.id}`,
       type: 'PATCH',
       data: {
         mapInfo: mapInfoObj.mapInfo,
@@ -24,7 +24,7 @@ const db_helpers = {
   },
   addMap: async (mapInfoObj) => {
     return db_helpers.ajaxRequestWrapper({
-      url: `http://localhost:3000/maps/`,
+      url: `/maps/`,
       type: 'POST',
       data: {
         mapInfo: mapInfoObj.mapInfo,
@@ -35,9 +35,33 @@ const db_helpers = {
   },
   addEditorToMap: async (mapId, editorId) => {
     return db_helpers.ajaxRequestWrapper({
-      url: `http://localhost:3000/editors/`,
+      url: `/editors/`,
       type: 'POST',
       data: { mapId, editorId },
+      datatype: 'json'
+    });
+  },
+  removeEditorFromMap: (mapId, editorId) => {
+    return db_helpers.ajaxRequestWrapper({
+      url: `/editors/`,
+      type: 'DELETE',
+      data: { mapId, editorId },
+      datatype: 'json'
+    });
+  },
+  addFavoriteMap: (mapId, userId) => {
+    return db_helpers.ajaxRequestWrapper({
+      url: `/favorites/`,
+      type: 'POST',
+      data: { mapId },
+      datatype: 'json'
+    });
+  },
+  removeFavoriteMap: (mapId, userId) => {
+    return db_helpers.ajaxRequestWrapper({
+      url: `/favorites/`,
+      type: 'DELETE',
+      data: { mapId },
       datatype: 'json'
     });
   },
@@ -68,8 +92,8 @@ const db_helpers = {
         success: function(res) {
           resolve(res);
         },
-        error: function (xhr, textStatus, error) {
-          reject(error);
+        error: function (xhr, textStatus, error) {          
+          reject(xhr.responseJSON);
         }
       });
     });

@@ -6,24 +6,34 @@
  */
 
 const express = require('express');
-const { addFavorite } = require('../db/queries/favorites');
+const favoriteQueries = require('../db/queries/favorites');
 const router  = express.Router();
 
-router.post('/', (req, res) => {
-  /* const userId = req.session["user_id"];
-  const mapId = req.body["mapId"];
-  addFavorite(mapId, userId)
-    .then((success) => {
-      if (success) {
-        res.redirect(`/map/${mapId}`); // redirection may not be the desired behaviour, placeholder
-      } else {
-        res.status(404).send("Unable to add map to favorites");
-      }
-    })
-    .catch((err) => {
-      console.log(err.message);
-    }); */
-  res.status(404).send("Not Yet Implemented.");
+router.post('/', async (req, res) => {
+  const userId = req.session.user_id;
+  const mapId = req.body.mapId;
+  if (!userId || mapId) { // user not logged in
+    return res.status(400).send("Malformed request. Missing parameters.");
+  }
+  try {
+    const addFavoriteResponse = await favoriteQueries.addFavorite(mapId, userId);
+    return res.status(200).send({ statusCode: 200, message: "Map has been favorited successfully." });
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
 });
 
+router.delete("/", async (req, res) => {
+  const userId = req.session.user_id;
+  const mapId = req.body.mapId;
+  if (!userId || mapId) { // user not logged in
+    return res.status(400).send("Malformed request. Missing parameters.");
+  }
+  try {
+    const removeFavoriteResponse = await favoriteQueries.deleteFavorite(mapId, userId);
+    return res.status(200).send({ statusCode: 200, message: "Map has been favorited successfully." });
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+});
 module.exports = router;

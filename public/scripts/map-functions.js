@@ -15,6 +15,7 @@ const onMarkerClickHandler = (e) => {
   $("form#markerInfo input[name='description']").val(_marker._description);
   $("form#markerInfo input[name='latitude']").val(_marker._latlng.lat);
   $("form#markerInfo input[name='longitude']").val(_marker._latlng.lng);
+  $("form#markerInfo input[name='image']").val(_marker._imageUrl);
   $("#markerInfo").slideDown();
 };
 
@@ -23,17 +24,32 @@ const onMarkerRightClickHandler = (e) => {
   _marker.remove();
 };
 
+const onMarkerHoverHandler = (layer) => {
+  console.log(layer);
+  // Access the custom properties of the marker
+  const title = layer._title;
+  const description = layer._description;
+  const imageUrl = layer._imageUrl;
+
+  // Create the tooltip content
+  // const content = '<strong>' + title + '</strong><br>' + description;
+  const content = `<div><strong> ${title} </strong><br> ${description} </div> ${imageUrl ? `<img src='${imageUrl}' alt='image' width='100px'>` : ""} `;
+
+  // Return the tooltip content
+  return content;
+};
 
 const onMapClickHandler = (event) => {
   const _map = event.target;
   let marker = new L.Marker(event.latlng, {draggable:true});
-  marker._title = Math.random();
-  marker._description = (Math.random() + 1).toString(36).substring(7);
+  marker._title = "Add a Title to me!"
+  marker._description = "...and a description!";
   _map.addLayer(marker);
   marker._id = marker._leaflet_id;
   console.log(_map.getContainer());
   marker.on('click', onMarkerClickHandler);
   marker.on('contextmenu', onMarkerRightClickHandler);
+  marker.bindTooltip(onMarkerHoverHandler, { offset: [0, -20] });
 };
 
 const initMap = () => {
@@ -141,31 +157,40 @@ const renderPinsToMap = (pinsObj, mapObj) => {
     // set custom properties
     marker._title = pin.title;
     marker._description = pin.description;
+    marker._imageUrl = pin.image;
     marker._id = pin.id;
     // pin it to the map.
     mapObj.addLayer(marker);
     // add event handlers.
     marker.on('click', onMarkerClickHandler);
     marker.on('contextmenu', onMarkerRightClickHandler);
+    marker.bindTooltip(onMarkerHoverHandler, { offset: [0, -20] });
   }
 };
 
 // updates marker information in memory.
 const updateMarkerInfo = () => {
+  console.log("Entered updateMarkerInfo");
   const _map = $("#map")[0]._leaflet_map;
   const _markerObj = {};
   const _markerForm = $("#markerInfo");
-  _markerObj.id = _markerForm.find("input[name='id']").val();
+  _markerObj.id = Number(_markerForm.find("input[name='id']").val());
   _markerObj.title = _markerForm.find("input[name='title']").val();
   _markerObj.description = _markerForm.find("input[name='description']").val();
+  _markerObj.image = _markerForm.find("input[name='image']").val();
 
   for (const marker in _map._layers) {
+    console.log("in the loop");
+    console.log(_map._layers[marker]._id, _markerObj.id, _map._layers[marker]._id === _markerObj.id);
     if (_map._layers[marker] instanceof L.Marker && _map._layers[marker]._id === _markerObj.id) {
       console.log("I'm in here.");
       _map._layers[marker]._title = _markerObj.title;
       _map._layers[marker]._description = _markerObj.description;
+      _map._layers[marker]._imageUrl = _markerObj.image;
+      break;
     }
   }
+  _markerForm.slideUp();
 };
 
 const saveMap = async() => {
@@ -214,6 +239,7 @@ const getAllMarkers = (map) => {
         map_id: map._appId,
         title: _marker._title,
         description: _marker._description,
+        image: _marker._imageUrl,
         latitude: _marker._latlng.lat,
         longitude: _marker._latlng.lng
       });

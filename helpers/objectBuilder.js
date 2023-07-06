@@ -17,6 +17,7 @@ const buildMarkerObjectFromMarkerInfo = (markerInfo, mapId) => {
   const returnObj = {
     title: markerInfo.title,
     description: markerInfo.description,
+    image: markerInfo.image,
     latitude: markerInfo.latitude,
     longitude: markerInfo.longitude,
   };

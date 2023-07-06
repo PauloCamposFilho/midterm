@@ -89,7 +89,7 @@ const addFavorite = function(mapId, userId) {
   const queryString = `
   INSERT INTO favorites (
     map_id,
-    user_id,
+    user_id
   )
   VALUES ($1, $2)
   RETURNING *

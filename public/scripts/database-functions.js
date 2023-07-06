@@ -49,7 +49,7 @@ const db_helpers = {
       datatype: 'json'
     });
   },
-  addFavoriteMap: (mapId, userId) => {
+  addFavoriteMap: (mapId) => {
     return db_helpers.ajaxRequestWrapper({
       url: `/favorites/`,
       type: 'POST',
@@ -57,7 +57,7 @@ const db_helpers = {
       datatype: 'json'
     });
   },
-  removeFavoriteMap: (mapId, userId) => {
+  removeFavoriteMap: (mapId) => {
     return db_helpers.ajaxRequestWrapper({
       url: `/favorites/`,
       type: 'DELETE',
@@ -92,7 +92,10 @@ const db_helpers = {
         success: function(res) {
           resolve(res);
         },
-        error: function (xhr, textStatus, error) {          
+        error: function (xhr, textStatus, error) {
+          console.log(xhr);
+          console.log(textStatus);
+          console.log(error);   
           reject(xhr.responseJSON);
         }
       });

@@ -11,15 +11,17 @@ const router  = express.Router();
 
 router.post('/', async (req, res) => {
   const userId = req.session.user_id;
+  console.log(req.body);
+  console.log(userId);
   const mapId = req.body.mapId;
-  if (!userId || mapId) { // user not logged in
+  if (!userId || !mapId) { // user not logged in
     return res.status(400).send("Malformed request. Missing parameters.");
   }
   try {
     const addFavoriteResponse = await favoriteQueries.addFavorite(mapId, userId);
     return res.status(200).send({ statusCode: 200, message: "Map has been favorited successfully." });
   } catch (err) {
-    return res.status(500).send(err.message);
+    return res.status(500).send({ statusCode: 500, message: err.message});
   }
 });
 
@@ -33,7 +35,7 @@ router.delete("/", async (req, res) => {
     const removeFavoriteResponse = await favoriteQueries.deleteFavorite(mapId, userId);
     return res.status(200).send({ statusCode: 200, message: "Map has been favorited successfully." });
   } catch (err) {
-    return res.status(500).send(err.message);
+    return res.status(500).send({ statusCode: 500, message: err.message});
   }
 });
 module.exports = router;

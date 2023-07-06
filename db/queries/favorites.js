@@ -105,6 +105,7 @@ const addFavorite = function(mapId, userId) {
     })
     .catch((err) => {
       console.log(err.message);
+      throw new Error(err);
     });
 };
 

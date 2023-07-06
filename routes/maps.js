@@ -101,12 +101,23 @@ router.post('/', async (req, res) => {
   }
 });
 
+// this is the edit route for maps.
 router.patch('/:id', async (req, res) => {
   console.log('Entered the PATCH maps/:id route');
+  if (!req.session.user_id) {
+    return res.status(401).send("User must be logged in to create a map.");
+  }
+  const _userId = Number(req.session.user_id);
   if (req.body) {
     const _mapId = req.body.mapInfo.id;
     const _mapObj = objHelpers.buildMapObjectFromMapInfo(req.body.mapInfo, true);
     try {
+      const mapInfo = await queries.getMapWithID(_mapId);
+      const mapEditors = await editorQueries.getAllEditorsForMap(_mapId);
+      const canEdit = mapEditors.some((editors) => { return editors.id ===  _userId }) || mapInfo.user_id === _userId;
+      if (!canEdit) {
+        return res.status(401).send({ statusCode: 401, message: "You do not have permission to edit this map." });
+      }
       const updateResponse = await queries.updateMap(_mapId, _mapObj);
       const deleteResponse = await pinQueries.deletePinsWithMapId(_mapId);
       for (const pin in req.body.markerInfo) {

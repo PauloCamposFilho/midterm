@@ -45,21 +45,26 @@
       <% } %>
       <% if (mapInfo && mapInfo.editors.length > 0) { %>
         <div class="map-editor-list">
+          <h6>Map contributors</h6>
           <ul>
           <% for (const editor in mapInfo.editors) { %>
-            <li><%= mapInfo.editors[editor].username %><button class="btn btn-sm btn-danger removeEditor" data-editorId="<%= mapInfo.editors[editor].id %>">X</button></li>
+            <li><%= mapInfo.editors[editor].username %>
+              <% if (userOwnsMap) { %>
+              <button class="btn btn-sm btn-danger removeEditor" data-editorId="<%= mapInfo.editors[editor].id %>">X</button>
+              <% } %>
+            </li>
           <% } %>
           </ul>
         </div>
-      
+
     <% } %>
         <div class="favorite-container">
           <% if (mapInfo && mapInfo.favorite_count > 0) { %>
-            <span><i class="fa fa-heart favorite-indicator 
+            <span><i class="fa fa-heart favorite-indicator
             <% if (mapInfo.isUserFavorite) { %>
-              favorited removeFavorite 
+              favorited removeFavorite
             <% } else { %>
-              addFavorite 
+              addFavorite
             <% } %>" data-mapId="<%= mapId %>">
           </i><span class="favorite-count"> <%= mapInfo.favorite_count %> </span>
           <% } %>

@@ -9,70 +9,81 @@
   </head>
   <body>
     <%- include('partials/_nav-bar') %>
-    <div class="container">
-      <div class="row">
-        <div class="map-container">
-          <div id="map" data-mapId="<%= mapId %>"></div>
-          <div style="display: flex; flex-wrap: wrap;">
-            <form id="mapInfo">
-              <input type="hidden" name="id" value="<%= mapId %>">
-              <input type="text" name="title" placeholder="Title"/>
-              <input type="text" name="description" placeholder="description"/>
-              <input type="text" name="thumbnail_photo" placeholder="URL of image"/>
-              <button type="button" id="saveMap">Save Map</button>
-              <img class="map-thumbnail" style="max-width: 100px;">
+    <div class="container-fluid">
+      <div class="row gap-2">
+        <div class="col-1 rounded map-container" id="map" data-mapId="<%= mapId %>"></div>
+        <div class="col px-4 py-4">
+          <div class="row map-information-container">
+            <form class="row row-gap-2" id="mapInfo">
+              <input class="row" type="hidden" name="id" value="<%= mapId %>">
+              <div class="row">
+                <div class="col-2">
+                  <img class="map-thumbnail img-thumbnail" style="max-width: 100px;">
+                </div>
+                <div class="col-10 align-self-center">
+                  <input class="form-control form-control-lg fs-1" type="text" name="title" placeholder="Title"/>
+                </div>
+              </div>
+              <div class="row">
+                <input class="form-control form-control-lg" type="text" name="description" placeholder="description"/>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <input class="form-control" type="text" name="thumbnail_photo" placeholder="URL of image"/>
+                </div>
+                <div class="col">
+                  <button class="btn btn-primary" type="button" id="saveMap">Save Map</button>
+                </div>
+              </div>
             </form>
           </div>
-        </div>
-        <form id="markerInfo">
-          <input type="hidden" name="id" placeholder="0" />
-          <input type="text" name="title" placeholder="Title"/>
-          <input type="text" name="description" placeholder="description"/>
-          <input type="text" name="latitude" />
-          <input type="text" name="longitude" />
-          <input type="text" name="image" placeholder="Image URL">
-          <button type="button" id="savePinData">Save Pin</button>
-        </form>
-      </div>
-      <div class="map-information-container">
-      <% if (userId && mapId > 0 && userOwnsMap) { %>
-          <div>
-            <select id="mapEditors">
-              <option value="0">Select Editor</option>
-              <% for (const user in users) { %>
-                <option value="<%= users[user].id %>"><%= users[user].username %></option>
-              <% } %>
-            </select>
-            <button type="button" class="btn btn-primary addEditor">Add Editor</button>
-          </div>
-        <% } %>
-        <% if (mapInfo && mapInfo.editors.length > 0) { %>
-          <div class="map-editor-list">
-            <h6>Map contributors</h6>
-            <ul>
-            <% for (const editor in mapInfo.editors) { %>
-              <li><%= mapInfo.editors[editor].username %>
-                <% if (userOwnsMap) { %>
-                <button class="btn btn-sm btn-danger removeEditor" data-editorId="<%= mapInfo.editors[editor].id %>">X</button>
+          <% if (userId && mapId > 0 && userOwnsMap) { %>
+            <div>
+              <select id="mapEditors">
+                <option value="0">Select Editor</option>
+                <% for (const user in users) { %>
+                  <option value="<%= users[user].id %>"><%= users[user].username %></option>
                 <% } %>
-              </li>
-            <% } %>
-            </ul>
-          </div>
-
-        <% } %>
+              </select>
+              <button type="button" class="btn btn-primary addEditor">Add Editor</button>
+            </div>
+          <% } %>
+          <% if (mapInfo && mapInfo.editors.length > 0) { %>
+            <div class="map-editor-list">
+              <h6>Map contributors</h6>
+              <ul>
+                <% for (const editor in mapInfo.editors) { %>
+                  <li><%= mapInfo.editors[editor].username %>
+                    <% if (userOwnsMap) { %>
+                      <button class="btn btn-sm btn-danger removeEditor" data-editorId="<%= mapInfo.editors[editor].id %>">X</button>
+                    <% } %>
+                  </li>
+                <% } %>
+              </ul>
+            </div>
+          <% } %>
           <div class="favorite-container">
             <% if (mapInfo && mapInfo.favorite_count > 0) { %>
               <span><i class="fa fa-heart favorite-indicator
-              <% if (mapInfo.isUserFavorite) { %>
-                favorited removeFavorite
-              <% } else { %>
-                addFavorite
-              <% } %>" data-mapId="<%= mapId %>">
-            </i><span class="favorite-count"> <%= mapInfo.favorite_count %> </span>
+                <% if (mapInfo.isUserFavorite) { %>
+                  favorited removeFavorite
+                <% } else { %>
+                  addFavorite
+                <% } %>" data-mapId="<%= mapId %>">
+              </i><span class="favorite-count"> <%= mapInfo.favorite_count %> </span>
             <% } %>
           </div>
+          <form id="markerInfo">
+            <input type="hidden" name="id" placeholder="0" />
+            <input type="text" name="title" placeholder="Title"/>
+            <input type="text" name="description" placeholder="description"/>
+            <input type="text" name="latitude" />
+            <input type="text" name="longitude" />
+            <input type="text" name="image" placeholder="Image URL">
+            <button type="button" id="savePinData">Save Pin</button>
+          </form>
         </div>
+      </div>
     </div>
   </body>
 </html>

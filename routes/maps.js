@@ -41,6 +41,7 @@ router.get('/:id', async (req, res) => {
   templateVars.mapId = _mapId;
   templateVars.userId = req.session["user_id"];
   templateVars.userOwnsMap = false;
+  templateVars.userIsEditor = false;
 
   if (!_mapId) { // no mapId? Shouldnt even be in here.
     return res.status(500).send("Malformed request. No mapId given.");
@@ -51,6 +52,7 @@ router.get('/:id', async (req, res) => {
     const mapInfo = await queries.getMapWithID(_mapId);
     if (mapInfo) {
       mapInfo.editors = await editorQueries.getAllEditorsForMap(_mapId);
+      templateVars.userIsEditor = mapInfo.editors.some((editors) => { return editors.id ===  _userId });
       templateVars.userOwnsMap = templateVars.userId === mapInfo.user_id;
       const currentUserFavoriteMaps = await favoriteQueries.getAllFavoritesForUser(templateVars.userId);
       mapInfo.isUserFavorite = currentUserFavoriteMaps.some((maps) => { return maps.id === Number(_mapId); });

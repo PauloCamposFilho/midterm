@@ -9,66 +9,70 @@
   </head>
   <body>
     <%- include('partials/_nav-bar') %>
-    <div class="map-container">
-      <div id="map" data-mapId="<%= mapId %>"></div>
-      <div style="display: flex; flex-wrap: wrap;">
-        <form id="mapInfo">
-          <input type="hidden" name="id" value="<%= mapId %>">
+    <div class="container">
+      <div class="row">
+        <div class="map-container">
+          <div id="map" data-mapId="<%= mapId %>"></div>
+          <div style="display: flex; flex-wrap: wrap;">
+            <form id="mapInfo">
+              <input type="hidden" name="id" value="<%= mapId %>">
+              <input type="text" name="title" placeholder="Title"/>
+              <input type="text" name="description" placeholder="description"/>
+              <input type="text" name="thumbnail_photo" placeholder="URL of image"/>
+              <button type="button" id="saveMap">Save Map</button>
+              <img class="map-thumbnail" style="max-width: 100px;">
+            </form>
+          </div>
+        </div>
+        <form id="markerInfo">
+          <input type="hidden" name="id" placeholder="0" />
           <input type="text" name="title" placeholder="Title"/>
           <input type="text" name="description" placeholder="description"/>
-          <input type="text" name="thumbnail_photo" placeholder="URL of image"/>
-          <button type="button" id="saveMap">Save Map</button>
-          <img class="map-thumbnail" style="max-width: 100px;">
+          <input type="text" name="latitude" />
+          <input type="text" name="longitude" />
+          <input type="text" name="image" placeholder="Image URL">
+          <button type="button" id="savePinData">Save Pin</button>
         </form>
       </div>
-    </div>
-    <form id="markerInfo">
-      <input type="hidden" name="id" placeholder="0" />
-      <input type="text" name="title" placeholder="Title"/>
-      <input type="text" name="description" placeholder="description"/>
-      <input type="text" name="latitude" />
-      <input type="text" name="longitude" />
-      <input type="text" name="image" placeholder="Image URL">
-      <button type="button" id="savePinData">Save Pin</button>
-    </form>
-    <div class="map-information-container">
-    <% if (userId && mapId > 0 && userOwnsMap) { %>
-        <div>
-          <select id="mapEditors">
-            <option value="0">Select Editor</option>
-            <% for (const user in users) { %>
-              <option value="<%= users[user].id %>"><%= users[user].username %></option>
-            <% } %>
-          </select>
-          <button type="button" class="btn btn-primary addEditor">Add Editor</button>
-        </div>
-      <% } %>
-      <% if (mapInfo && mapInfo.editors.length > 0) { %>
-        <div class="map-editor-list">
-          <h6>Map contributors</h6>
-          <ul>
-          <% for (const editor in mapInfo.editors) { %>
-            <li><%= mapInfo.editors[editor].username %>
-              <% if (userOwnsMap) { %>
-              <button class="btn btn-sm btn-danger removeEditor" data-editorId="<%= mapInfo.editors[editor].id %>">X</button>
+      <div class="map-information-container">
+      <% if (userId && mapId > 0 && userOwnsMap) { %>
+          <div>
+            <select id="mapEditors">
+              <option value="0">Select Editor</option>
+              <% for (const user in users) { %>
+                <option value="<%= users[user].id %>"><%= users[user].username %></option>
               <% } %>
-            </li>
-          <% } %>
-          </ul>
-        </div>
+            </select>
+            <button type="button" class="btn btn-primary addEditor">Add Editor</button>
+          </div>
+        <% } %>
+        <% if (mapInfo && mapInfo.editors.length > 0) { %>
+          <div class="map-editor-list">
+            <h6>Map contributors</h6>
+            <ul>
+            <% for (const editor in mapInfo.editors) { %>
+              <li><%= mapInfo.editors[editor].username %>
+                <% if (userOwnsMap) { %>
+                <button class="btn btn-sm btn-danger removeEditor" data-editorId="<%= mapInfo.editors[editor].id %>">X</button>
+                <% } %>
+              </li>
+            <% } %>
+            </ul>
+          </div>
 
-    <% } %>
-        <div class="favorite-container">
-          <% if (mapInfo && mapInfo.favorite_count > 0) { %>
-            <span><i class="fa fa-heart favorite-indicator
-            <% if (mapInfo.isUserFavorite) { %>
-              favorited removeFavorite
-            <% } else { %>
-              addFavorite
-            <% } %>" data-mapId="<%= mapId %>">
-          </i><span class="favorite-count"> <%= mapInfo.favorite_count %> </span>
-          <% } %>
+        <% } %>
+          <div class="favorite-container">
+            <% if (mapInfo && mapInfo.favorite_count > 0) { %>
+              <span><i class="fa fa-heart favorite-indicator
+              <% if (mapInfo.isUserFavorite) { %>
+                favorited removeFavorite
+              <% } else { %>
+                addFavorite
+              <% } %>" data-mapId="<%= mapId %>">
+            </i><span class="favorite-count"> <%= mapInfo.favorite_count %> </span>
+            <% } %>
+          </div>
         </div>
-      </div>
+    </div>
   </body>
 </html>

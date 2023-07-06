@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wikimaps - Your maps</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <%- include('partials/_head') %>
+    <!-- Forcing tables to share columns widths, to be moved to dedicated css file later -->
+    <style>
+      .table thead th {
+        width: 33.33%;
+      }
+      #profile_picture {
+        max-width: 500px;
+        max-height: 500px;
+      }
+      .map-thumbnail {
+        max-width: 200px;
+        max-height: 200px;
+      }
+      #user_maps table tbody tr, #favorite_maps table tbody tr {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/_nav-bar') %>
+    <div class="container">
+      <div class="row">
+        <header class="col border rounded" id="user_info">
+          <div class="row" id="profile_picture">
+              <!-- Placeholder profile picture -->
+              <img src="https://cfvod.kaltura.com/p/2531481/sp/253148100/thumbnail/entry_id/1_krfvfigu/version/100011/width/478/height/269/type/3/width/478/height/269/type/3/quality/100" class="img-fluid rounded">
+          </div>
+          <div class="row fs-1 justify-content-center" id="username">
+            <%= userInfo["username"] %>
+          </div>
+        </header>
+        <div class="col-8">
+          <div class="row" id="top_map">
+          </div>          
+          <% if (userMaps) { %>
+          <div class="row" id="favorite_maps">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Last Edited</th>
+                  <th scope="col">Thumbnail</th>
+                  <th scope="col">Title</th>                  
+                </tr>
+              </thead>
+              <tbody>
+                <% for (const map of userMaps) { %>
+                <tr data-mapId="<%= map.id %>">
+                  <th scope="row"><%= map["last_edit"].toLocaleDateString() %> <%= map["last_edit"].toLocaleTimeString() %></th>
+                  <td>
+                    <img src="<%= map.thumbnail_photo %>" class="map-thumbnail img-fluid img-thumbnail">
+                  </td>
+                  <td><%= map["title"] %></td>                  
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // move to own file later.
+      $(document).ready(function() {
+        $("#user_maps table tbody tr, #favorite_maps table tbody tr").on('click', function(e) {
+          const _mapId = $(this).attr("data-mapId");
+          // window.location.href = `${window.location.origin}/maps/${_mapId}`;
+          window.open(`${window.location.origin}/maps/${_mapId}`, '_blank');
+        });
+      });
+    </script>
+  </body>
+</html>

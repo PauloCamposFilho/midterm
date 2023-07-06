@@ -34,6 +34,22 @@ router.get("/favorites", async (req, res) => {
   }
 });
 
+router.get("/my-maps", async (req, res) => {
+  const _userId = req.session.user_id;
+  const templateVars = {};
+  templateVars.userId = _userId;
+  if (!_userId) { // something went wrong, shouldnt happen.
+    return res.status(500).send({ statusCode: 500, message: "Malformed Request. User not logged in." });
+  }
+  try {
+    templateVars.userInfo = await userQueries.getUserWithId(_userId);
+    templateVars.userMaps = await mapQueries.getMapsFromUser(_userId, 999999); // I hope to have to change this in the future.
+    return res.status(200).render("favorites", templateVars);
+  } catch (err) {
+    return res.status(500).send({ statusCode: 500, message: err.message });
+  }
+});
+
 router.get('/:id', async (req, res) => {
   console.log("Yeah, I'm in here...");
   const _userId = req.params.id;

@@ -15,7 +15,16 @@ const favoriteQueries = require("../db/queries/favorites");
 const objHelpers = require("../helpers/objectBuilder");
 
 router.get("/new", (req, res) => {
-  res.redirect("/maps/0");
+  const templateVars = {};
+  templateVars.mapId = 0;
+  templateVars.userId = req.session["user_id"];
+  templateVars.userOwnsMap = false;
+  templateVars.userIsEditor = false;
+  templateVars.mapInfo = undefined;
+  if (!templateVars.userId) { // user not logged in, shouldn't be here. Redirect to /
+    return res.redirect("/");
+  }
+  return res.status(200).render("map", templateVars);
 });
 
 router.get('/', async (req, res) => {
@@ -50,13 +59,14 @@ router.get('/:id', async (req, res) => {
   try {
     templateVars.users = await userQueries.getAllUsers();
     const mapInfo = await queries.getMapWithID(_mapId);
-    if (mapInfo) {
-      mapInfo.editors = await editorQueries.getAllEditorsForMap(_mapId);
-      templateVars.userOwnsMap = templateVars.userId === mapInfo.user_id;
-      templateVars.userCanEdit = mapInfo.editors.some((editors) => { return editors.id ===  templateVars.userId }) || templateVars.userOwnsMap;
-      const currentUserFavoriteMaps = await favoriteQueries.getAllFavoritesForUser(templateVars.userId);
-      mapInfo.isUserFavorite = currentUserFavoriteMaps.some((maps) => { return maps.id === Number(_mapId); });
+    if (!mapInfo) { // requested bad/nonexistent map, back to index.
+      return res.redirect("/");
     }
+    mapInfo.editors = await editorQueries.getAllEditorsForMap(_mapId);
+    const currentUserFavoriteMaps = await favoriteQueries.getAllFavoritesForUser(templateVars.userId);
+    templateVars.userOwnsMap = templateVars.userId === mapInfo.user_id;
+    templateVars.userCanEdit = mapInfo.editors.some((editors) => { return editors.id ===  templateVars.userId }) || templateVars.userOwnsMap;
+    mapInfo.isUserFavorite = currentUserFavoriteMaps.some((maps) => { return maps.id === Number(_mapId); });
     templateVars.mapInfo = mapInfo;
     return res.status(200).render("map", templateVars);
   } catch(err) {

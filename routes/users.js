@@ -22,8 +22,8 @@ router.get("/favorites", async (req, res) => {
   const _userId = req.session.user_id;
   const templateVars = {};
   templateVars.userId = _userId;
-  if (!_userId) { // something went wrong, shouldnt happen.
-    return res.status(500).send({ statusCode: 500, message: "Malformed Request. User not logged in." });
+  if (!_userId) { // user not logged in, shouldn't be here. Redirect to /
+    return res.redirect("/");
   }
   try {
     templateVars.userInfo = await userQueries.getUserWithId(_userId);
@@ -38,8 +38,8 @@ router.get("/my-maps", async (req, res) => {
   const _userId = req.session.user_id;
   const templateVars = {};
   templateVars.userId = _userId;
-  if (!_userId) { // something went wrong, shouldnt happen.
-    return res.status(500).send({ statusCode: 500, message: "Malformed Request. User not logged in." });
+  if (!_userId) { // user not logged in, shouldn't be here. Redirect to /
+    return res.redirect("/");
   }
   try {
     templateVars.userInfo = await userQueries.getUserWithId(_userId);

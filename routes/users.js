@@ -58,7 +58,7 @@ router.get('/:id', async (req, res) => {
   console.log(_userId);
   try {
     templateVars.userInfo = await userQueries.getUserWithId(_userId);
-    templateVars.userMaps = await mapQueries.getMapsFromUser(_userId, 5);
+    templateVars.userMaps = await mapQueries.getMapsFromUser(_userId, 999999);
     templateVars.topMaps = await mapQueries.getTopMaps(_userId, 5);
     console.log(templateVars)
     if (_userId) {

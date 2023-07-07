@@ -34,7 +34,8 @@ const getMapsFromUser = function(userId, limit) {
   FROM maps
   JOIN users ON maps.user_id = users.id
   LEFT JOIN favorites ON maps.id = favorites.map_id
-  WHERE maps.user_id = $1
+  LEFT JOIN editors ON maps.id = editors.map_id
+  WHERE maps.user_id = $1 OR editors.user_id = $1
   GROUP BY maps.id
   ORDER BY last_edit DESC
   `;

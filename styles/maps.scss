@@ -2,8 +2,9 @@
   font-size: 8px;
 }
 #map {
-  height: 800px;
-  width: 75%;
+  width: calc(100vh - 56px); /* Adjust the value to subtract the navbar height */
+  height: calc(100vh - 106px);
+  margin: 1%;
 }
 #markerInfo {
   display: none;

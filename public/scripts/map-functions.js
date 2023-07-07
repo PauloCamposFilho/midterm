@@ -54,6 +54,9 @@ const onMapClickHandler = (event) => {
   marker.on('click', onMarkerClickHandler);
   marker.on('contextmenu', onMarkerRightClickHandler);
   marker.bindTooltip(onMarkerHoverHandler, { offset: [0, -20] });
+  if (!$("#markerInfo").is(":visible")) {
+    $("#markerInfo").slideDown();
+  }
 };
 
 const initMap = () => {

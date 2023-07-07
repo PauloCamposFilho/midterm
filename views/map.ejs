@@ -13,6 +13,7 @@
   </head>
   <body>
     <%- include('partials/_nav-bar') %>
+    <input type="hidden" id="userCanEdit" style="display: none" value="<% if (userCanEdit) { %>true<% } else { %>false<% } %>">
     <div class="container-fluid">
       <div class="row gap-2">
         <div class="col-1 rounded map-container" id="map" data-mapId="<%= mapId %>"></div>
@@ -25,7 +26,11 @@
                   <img class="map-thumbnail img-thumbnail" style="max-width: 100px;">
                 </div>
                 <div class="row-xl col-md-8">
-                  <input class="form-control form-control-lg fs-1" type="text" name="title" placeholder="Title"/>
+                  <input class="form-control form-control-lg fs-1" type="text" name="title" placeholder="Title"
+                  <% if (!userCanEdit) { %>
+                    readonly
+                  <% } %>
+                  />
                 </div>
                 <div class="row-xl col-md-2 favorite-container fs-4">
                   <% if (mapInfo && mapInfo.favorite_count > 0) { %>
@@ -39,14 +44,24 @@
                 </div>
               </div>
               <div class="row">
-                <input class="form-control form-control-lg" type="text" name="description" placeholder="description"/>
+                <input class="form-control form-control-lg" type="text" name="description" placeholder="description"
+                <% if (!userCanEdit) { %>
+                  readonly
+                <% } %>
+                />
               </div>
               <div class="row">
                 <div class="col">
-                  <input class="form-control" type="text" name="thumbnail_photo" placeholder="URL of image"/>
+                  <input class="form-control" type="text" name="thumbnail_photo" placeholder="URL of image"
+                  <% if (!userCanEdit) { %>
+                    readonly
+                  <% } %>
+                  />
                 </div>
                 <div class="col">
+                  <% if (userCanEdit) { %>
                   <button class="btn btn-primary" type="button" id="saveMap">Save Map</button>
+                  <% } %>
                 </div>
               </div>
             </form>

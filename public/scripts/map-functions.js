@@ -40,6 +40,10 @@ const onMarkerHoverHandler = (layer) => {
 };
 
 const onMapClickHandler = (event) => {
+  const userCanEdit = $("#userCanEdit").val() === 'true'; // userCanEdit is a hidden input field in map.ejs at the top of <body>. Comparison written this way since strings are always truthy.
+  if (!userCanEdit) {
+    return;
+  }
   const _map = event.target;
   let marker = new L.Marker(event.latlng, {draggable:true});
   marker._title = "Add a Title to me!"
@@ -215,7 +219,7 @@ const saveMap = async() => {
     let response;
     if (mapInfo.id > 0) {
       response = await db_helpers.editMapInfo({ mapInfo, markerInfo });
-    } else {      
+    } else {
       response = await db_helpers.addMap({ mapInfo, markerInfo });
       if (response.mapId) {
         window.location.href = `${window.location.origin}/maps/${response.mapId}`;
@@ -262,7 +266,6 @@ $(document).ready(function() {
         return;
       }
       $(".addEditor").prop("disabled", false);
-    }).trigger("change");  
+    }).trigger("change");
   });
-  
-  
+

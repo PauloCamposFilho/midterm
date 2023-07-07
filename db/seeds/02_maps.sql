@@ -15,4 +15,4 @@ VALUES
 (9, 40.6922, -74.0428, 50, 'Charming Villages', 'https://i.imgur.com/3CfZRfx.png', 'Quaint and picturesque villages with rich history', '2023-06-24 16:25:00'),
 (10, 40.6929, -74.0446,50, 'Famous Bridges', 'https://i.imgur.com/3CfZRfx.png', 'Iconic bridges spanning rivers and connecting cities', '2023-06-13 19:50:00'),
 (1, 40.6930, -74.0455, 50, 'My Houses', 'https://i.imgur.com/3CfZRfx.png', 'Places I have lived in the past', '2023-07-01 01:00:00'),
-(1, 40.6875, -74.0443, 50, 'Cool Rocks', 'https://i.imgur.com/3CfZRfx.png', 'Wicked sick rocks my dude', '2023-06-21 12:00:00');
+(2, 40.6875, -74.0443, 50, 'Cool Rocks', 'https://i.imgur.com/3CfZRfx.png', 'Wicked sick rocks my dude', '2023-06-21 12:00:00');

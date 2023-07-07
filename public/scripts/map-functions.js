@@ -163,9 +163,10 @@ const renderPinsToMap = (pinsObj, mapObj) => {
   if (!Array.isArray(pinsObj) || pinsObj.length === 0) {
     return;
   }
+  const userCanEdit = $("#userCanEdit").val() === 'true'; // userCanEdit is a hidden input field in map.ejs at the top of <body>. Comparison written this way since strings are always truthy.
   for (const pin of pinsObj) {
     // create L.Marker object
-    let marker = new L.Marker([pin.latitude, pin.longitude], {draggable:true});
+    let marker = new L.Marker([pin.latitude, pin.longitude], {draggable:userCanEdit});
     // set custom properties
     marker._title = pin.title;
     marker._description = pin.description;

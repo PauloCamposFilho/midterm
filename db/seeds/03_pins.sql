@@ -89,4 +89,7 @@ VALUES
 (9, 37.7749, -122.4194, 'Cozy Coffee Corner', 'A charming cafe with a warm and inviting atmosphere', NULL),
 (9, 51.5074, -0.1278, 'Tower Bridge', 'An iconic bridge crossing the River Thames in London', NULL),
 (9, 38.9072, -77.0369, 'Historic Coffee House', 'A coffee shop with a rich history and charming ambiance', NULL),
-(9, 39.9526, -75.1652, 'Independence Hall', 'The birthplace of the United States of America', NULL);
+(9, 39.9526, -75.1652, 'Independence Hall', 'The birthplace of the United States of America', NULL),
+
+-- Pins for Map ID 16
+(16, 40.6892, -74.0445, 'Statue of Liberty', 'Iconic national monument on Liberty Island.', 'https://i.imgur.com/wEHqm3B.png');

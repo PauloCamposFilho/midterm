@@ -29,13 +29,12 @@
                 </div>
                 <div class="row-xl col-md-2 favorite-container fs-4">
                   <% if (mapInfo && mapInfo.favorite_count > 0) { %>
-                    <span><i class="fa fa-heart fa-lg favorite-indicator"
+                    <span><button type="button" class="btn btn-sm btn-info-outline favoriteToggle" data-mapId="<%= mapId %>">
+                      <i class="fa fa-heart favorite-indicator
                       <% if (mapInfo.isUserFavorite) { %>
-                        favorited removeFavorite
-                      <% } else { %>
-                        addFavorite
-                      <% } %>" data-mapId="<%= mapId %>">
-                    </i><span class="favorite-count"> &nbsp<%= mapInfo.favorite_count %> </span>
+                      favorited
+                      <% } %>"></i>
+                    <span class="favorite-count"> &nbsp<%= mapInfo.favorite_count %> </span>
                   <% } %>
                 </div>
               </div>
@@ -71,7 +70,7 @@
               <div class="col-4 fs-5 list-group map-editor-list">
                 <h6>Map contributors</h6>
                 <% for (const editor in mapInfo.editors) { %>
-                  <a href="/users/<%= mapInfo.editors[editor].id %>" class="rounded list-group-item list-group-item-action"><%= mapInfo.editors[editor].username %>
+                  <a href="/users/<%= mapInfo.editors[editor].id %>" target="_blank" class="rounded list-group-item list-group-item-action"><%= mapInfo.editors[editor].username %>
                     <% if (userOwnsMap) { %>
                       <button class="btn btn-sm btn-danger removeEditor" data-editorId="<%= mapInfo.editors[editor].id %>">X</button>
                     <% } %>

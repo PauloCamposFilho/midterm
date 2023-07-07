@@ -12,16 +12,27 @@
     <div class="container-fluid">
       <div class="row gap-2">
         <div class="col-1 rounded map-container" id="map" data-mapId="<%= mapId %>"></div>
-        <div class="col px-4 py-4">
-          <div class="row map-information-container">
-            <form class="row row-gap-2" id="mapInfo">
+        <div class="col px-2 py-4">
+          <div class="row rounded border px-2 py-2 map-information-container">
+            <form class="row gap-2" id="mapInfo">
               <input class="row" type="hidden" name="id" value="<%= mapId %>">
-              <div class="row">
-                <div class="col-2">
+              <div class="row align-items-center">
+                <div class="row-xl col-md-2">
                   <img class="map-thumbnail img-thumbnail" style="max-width: 100px;">
                 </div>
-                <div class="col-10 align-self-center">
+                <div class="row-xl col-md-8">
                   <input class="form-control form-control-lg fs-1" type="text" name="title" placeholder="Title"/>
+                </div>
+                <div class="row-xl col-md-2 favorite-container fs-4">
+                  <% if (mapInfo && mapInfo.favorite_count > 0) { %>
+                    <span><i class="fa fa-heart fa-lg favorite-indicator"
+                      <% if (mapInfo.isUserFavorite) { %>
+                        favorited removeFavorite
+                      <% } else { %>
+                        addFavorite
+                      <% } %>" data-mapId="<%= mapId %>">
+                    </i><span class="favorite-count"> &nbsp<%= mapInfo.favorite_count %> </span>
+                  <% } %>
                 </div>
               </div>
               <div class="row">
@@ -36,52 +47,68 @@
                 </div>
               </div>
             </form>
-          </div>
-          <% if (userId && mapId > 0 && userOwnsMap) { %>
-            <div>
-              <select id="mapEditors">
-                <option value="0">Select Editor</option>
-                <% for (const user in users) { %>
-                  <option value="<%= users[user].id %>"><%= users[user].username %></option>
-                <% } %>
-              </select>
-              <button type="button" class="btn btn-primary addEditor">Add Editor</button>
+            <% if (userId && mapId > 0 && userOwnsMap) { %>
+            <div class="row pt-2 justify-content-start">
+              <div class="col">
+                <select class="form-select" aria-label="Default select example" id="mapEditors">
+                  <option value="0">Select Editor</option>
+                  <% for (const user in users) { %>
+                    <option value="<%= users[user].id %>"><%= users[user].username %></option>
+                  <% } %>
+                </select>
+              </div>
+              <div class="col">
+                <button type="button" class="btn btn-primary addEditor">Add Editor</button>
+              </div>
             </div>
-          <% } %>
-          <% if (mapInfo && mapInfo.editors.length > 0) { %>
-            <div class="map-editor-list">
-              <h6>Map contributors</h6>
-              <ul>
+            <% } %>
+            <% if (mapInfo && mapInfo.editors.length > 0) { %>
+            <div class="row">
+              <div class="col-4 fs-5 list-group map-editor-list">
+                <h6>Map contributors</h6>
                 <% for (const editor in mapInfo.editors) { %>
-                  <li><%= mapInfo.editors[editor].username %>
+                  <a href="/users/<%= mapInfo.editors[editor].id %>" class="rounded list-group-item list-group-item-action"><%= mapInfo.editors[editor].username %>
                     <% if (userOwnsMap) { %>
                       <button class="btn btn-sm btn-danger removeEditor" data-editorId="<%= mapInfo.editors[editor].id %>">X</button>
                     <% } %>
-                  </li>
+                  <a>
                 <% } %>
-              </ul>
+              </div>
             </div>
-          <% } %>
-          <div class="favorite-container">
-            <% if (mapInfo && mapInfo.favorite_count > 0) { %>
-              <span><i class="fa fa-heart favorite-indicator
-                <% if (mapInfo.isUserFavorite) { %>
-                  favorited removeFavorite
-                <% } else { %>
-                  addFavorite
-                <% } %>" data-mapId="<%= mapId %>">
-              </i><span class="favorite-count"> <%= mapInfo.favorite_count %> </span>
             <% } %>
+            <form class="row py-2 rounded border mt-2" id="markerInfo">
+              <div class="row">
+                <div class="col"><i class="fa-solid fa-location-dot"></i> Pin Info</div>
+                <div class="col">
+                  <input class="form-control form-control-sm" type="hidden" name="id" placeholder="0" />
+                </div>
+              </div>
+              <div class="row pt-1">
+                <div class="col pe-1">
+                  <input class="form-control form-control-sm" type="text" name="title" placeholder="Title"/>
+                </div>
+                <div class="col ps-1">
+                  <input class="form-control form-control-sm" type="text" name="description" placeholder="description"/>
+                </div>
+              </div>
+              <div class="row pt-1">
+                <div class="col pe-1">
+                  <input class="form-control form-control-sm" type="text" name="latitude" />
+                </div>
+                <div class="col ps-1">
+                  <input class="form-control form-control-sm" type="text" name="longitude" />
+                </div>
+              </div>
+              <div class="row pt-1">
+                <div class="col pe-1">
+                  <input class="form-control form-control-sm" type="text" name="image" placeholder="Image URL">
+                </div>
+                <div class="col ps-1">
+                  <button class="btn btn-primary btn-sm" type="button" id="savePinData">Save Pin</button>
+                </div>
+              </div>
+            </form>
           </div>
-          <form id="markerInfo">
-            <input type="hidden" name="id" placeholder="0" />
-            <input type="text" name="title" placeholder="Title"/>
-            <input type="text" name="description" placeholder="description"/>
-            <input type="text" name="latitude" />
-            <input type="text" name="longitude" />
-            <input type="text" name="image" placeholder="Image URL">
-            <button type="button" id="savePinData">Save Pin</button>
-          </form>
         </div>
       </div>
     </div>

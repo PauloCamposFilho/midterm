@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <%- include('partials/_head') %>
+    <link rel="stylesheet" href="../styles/index.css">
     <!-- Forcing tables to share columns widths, to be moved to dedicated css file later -->
     <style>
       .table thead th {
@@ -26,7 +27,7 @@
   <body>
     <%- include('partials/_nav-bar') %>
     <div class="container">
-      <div class="row">
+      <div class="row profile-flexbox">
         <header class="col border rounded" id="user_info">
           <div class="row" id="profile_picture">
               <!-- Placeholder profile picture -->
@@ -36,7 +37,7 @@
             <%= userInfo["username"] %>
           </div>
         </header>
-        <div class="col-8">
+        <div class="col-12">
           <div class="row" id="top_map">
           </div>
           <!-- check whether user has any maps with favorites before building top maps table -->

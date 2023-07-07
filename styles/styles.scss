@@ -1,0 +1,9 @@
+.navbar-brand {
+  font-family: 'Noto Serif Makasar', serif;
+}
+header {
+  font-family: 'Open Sans', sans-serif;
+}
+body {
+  font-family: 'Open Sans', sans-serif !important; /* bad practice, but I have to overwrite _reboot.css from bootstrap */
+}

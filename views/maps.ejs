@@ -5,28 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <%- include('partials/_head') %>
-    <!-- Forcing tables to share columns widths, to be moved to dedicated css file later -->
-    <style>
-      .table thead th {
-        width: 33.33%;
-      }
-      #profile_picture {
-        max-width: 500px;
-        max-height: 500px;
-      }
-      .map-thumbnail {
-        max-width: 200px;
-        max-height: 200px;
-      }
-      #user_maps table tbody tr, #favorite_maps table tbody tr {
-        cursor: pointer;
-      }
-    </style>
+    <link rel="stylesheet" href="../styles/index.css">
+    <!-- Forcing tables to share columns widths, to be moved to dedicated css file later -->    
   </head>
   <body>
     <%- include('partials/_nav-bar') %>
     <div class="container">
-      <div class="row">
+      <div class="row user-header">
         <header class="col border rounded" id="user_info">
           <div class="row">
             <h1>Welcome to Wikimaps!</h1>
@@ -34,7 +19,7 @@
           </div>          
         </header>
       </div>
-      <div class="row">
+      <div class="row maps">
         <div class="col-12">
           <div class="row" id="top_map">
           </div>
@@ -65,10 +50,14 @@
             </table>
           </div>
           <% } %>
-          <% if (userMaps && user) { %>
-          <div class="row">
-            <h4>Hey, <%= user.username %>!</h4>
-            <h6>Don't forget to check out activity on your maps.</h6>
+          <% if (userMaps && user) { %>          
+          <div class="row user-callout">
+            <header class="col border rounded">
+              <div class="row">                
+                <h4>Hey, <%= user.username %>!</h4>
+                <h6>Don't forget to check out activity on your maps.</h6>
+              </div>          
+            </header>
           </div>
           <div class="row" id="favorite_maps">
             <table class="table table-sm table-hover">

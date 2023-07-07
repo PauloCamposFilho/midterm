@@ -1,0 +1,50 @@
+.table thead th {
+  width: 33.33%;
+}
+
+#profile_picture {
+  max-width: 500px;
+  max-height: 500px;
+}
+
+.map-thumbnail {
+  width: 100px;
+  height: 100px;
+}
+
+#user_maps table tbody tr, #favorite_maps table tbody tr {
+  cursor: pointer;
+}
+
+.row.user-header, .row.maps {
+  margin-top: 50px;
+}
+
+header#user_info, .user-callout .row {
+  padding: 25px;
+}
+
+#user_maps table tbody td, #favorite_maps table tbody td {
+  padding: 20px 0px;
+}
+
+.user-callout {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.user-callout h4, .user-callout h6 {
+  padding: 0;
+}
+
+.profile-flexbox {
+  flex-direction: column;  
+}
+
+.profile-flexbox header {
+  margin-bottom: 5%;
+}
+
+.profile-flexbox header img {
+  width: 300px;
+}

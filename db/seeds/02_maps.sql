@@ -1,5 +1,9 @@
 INSERT INTO maps (user_id, latitude, longitude, zoom, title, thumbnail_photo, description, last_edit)
 VALUES
+(1, 40.721371974721, -73.9810752868652, 12, 'New York City Landmarks', 'https://i.imgur.com/3CfZRfx.png', 'Interesting places around NYC!', '2023-06-15 20:30:00'),
+(1, 48.8287915417456, 2.33974456787109, 11, 'Cool stuff in Paris!', 'https://i.imgur.com/3CfZRfx.png', 'Interesting places around Paris!', '2023-06-15 20:30:00'),
+(1, 49.2787106324468, -123.116505146027, 15, 'Restaurants in Downtown Vancouver', 'https://i.imgur.com/3CfZRfx.png', 'Some restaurants in the Vancouver area', '2023-06-15 20:30:00'),
+(1, 29.3821750751453, -6.15234375, 2, 'Big cities of the world', 'https://i.imgur.com/3CfZRfx.png', 'Some of the most populated cities in the world!', '2023-06-15 20:30:00'),
 (1, 40.6872, -74.0439, 50, 'Tall Buildings', 'https://i.imgur.com/3CfZRfx.png', 'A collection of tall buildings around the world', '2023-06-15 20:30:00'),
 (2, 48.8566, 2.3522, 50, 'Awesome Trees', 'https://i.imgur.com/3CfZRfx.png', 'Beautiful and unique trees in different locations', '2023-06-20 12:45:00'),
 (3, 48.8566, 2.3522, 50, 'Historical Landmarks', 'https://i.imgur.com/3CfZRfx.png', 'Famous historical landmarks and monuments', '2023-06-25 09:15:00'),

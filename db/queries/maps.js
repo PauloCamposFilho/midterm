@@ -52,13 +52,40 @@ const getMapsFromUser = function(userId, limit) {
     });
 };
 
+const getTopMapsGlobal = (limit = 999999) => {
+  const queryParams = [];
+  let queryString = `
+  SELECT maps.*, count(favorites.*) as favorites
+  FROM maps
+  LEFT JOIN favorites ON favorites.map_id = maps.id  
+  `;  
+  queryString += `
+  GROUP BY maps.id
+  ORDER BY count(favorites.*) DESC
+  `;
+  if (limit) {
+    queryParams.push(limit);
+    queryString += `LIMIT $${queryParams.length}`;
+  } else {
+    queryString += `LIMIT 5`;
+  }
+  return db
+    .query(queryString, queryParams)
+    .then((result) => {
+      return result.rows;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
 // Fetch most favorited maps, optionally filtered by a particular user. Limit can be specified, default is 5
 const getTopMaps = function (userId, limit) {
   const queryParams = [];
   let queryString = `
   SELECT maps.*, count(favorites.*) as favorites
-  FROM favorites
-  JOIN maps ON favorites.map_id = maps.id
+  FROM maps
+  LEFT JOIN favorites ON favorites.map_id = maps.id
   JOIN users ON favorites.user_id = users.id
   `;
   if (userId) {
@@ -180,4 +207,4 @@ const deleteMap = function(mapId) {
 };
 
 
-module.exports = { getMapWithID, getMapsFromUser, addMap, getTopMaps, updateMap, deleteMap };
+module.exports = { getMapWithID, getMapsFromUser,getTopMapsGlobal , addMap, getTopMaps, updateMap, deleteMap };

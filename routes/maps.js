@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
       templateVars.user = await userQueries.getUserWithId(templateVars.userId);
       templateVars.userMaps = await queries.getMapsFromUser(templateVars.userId);
     }
-    templateVars.maps = await queries.getTopMaps(null, 5);
+    templateVars.maps = await queries.getTopMapsGlobal();
     console.log(templateVars);
     return res.render("maps", templateVars);
   } catch (err) {

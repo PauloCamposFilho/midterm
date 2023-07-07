@@ -91,11 +91,12 @@
               <div class="col-4 fs-5 list-group map-editor-list">
                 <h6>Map contributors</h6>
                 <% for (const editor in mapInfo.editors) { %>
-                  <a href="/users/<%= mapInfo.editors[editor].id %>" target="_blank" class="rounded list-group-item list-group-item-action"><%= mapInfo.editors[editor].username %>
+                  <div class="rounded list-group-item list-group-item-action" style="display: flex; justify-content: space-between;">
+                    <a href="/users/<%= mapInfo.editors[editor].id %>" target="_blank" style="width: 100%; text-decoration: unset; color: #212529;"><%= mapInfo.editors[editor].username %></a>
                     <% if (userOwnsMap) { %>
                       <button class="btn btn-sm btn-danger removeEditor" data-editorId="<%= mapInfo.editors[editor].id %>">X</button>
                     <% } %>
-                  <a>
+                  </div>
                 <% } %>
               </div>
             </div>

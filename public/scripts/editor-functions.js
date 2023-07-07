@@ -29,18 +29,24 @@ const editorAddEventHandler = async ($button) => {
       const editorId = Number($("#mapEditors").val());
       const response = await db_helpers.addEditorToMap(mapId, editorId);
       console.log(response);
-      const $editorToAdd = $("<li>")
-      .text(response.user.username)
+      const $editorToAdd = $("<div>")
+        .addClass("rounded list-group-item list-group-item-action")
+        .attr("style", "display: flex; justify-content: space-between;");
+      $editorToAdd
+        .append($("<a>")
+        .attr("href", `/users/${editorId}`)
+        .attr("style", "width: 100%; text-decoration: unset; color: #212529;")
+        .text($(`#mapEditors option[value='${editorId}']`).text()));
+      $editorToAdd
       .append($("<button>")
-        .text("X")
-        .addClass("btn btn-sm btn-danger removeEditor")
-        .attr("data-editorid", response.user.id).click(function() { // anonymous function so I can use the $(this) context properly on the callback here. weird edge-case.
-          editorDeleteEventHandler($(this));
-        }));        
-      if ($(".map-editor-list").length > 0) {
-        $(".map-editor-list ul").append($editorToAdd);
-        return;
-      }
+      .text("X")
+      .addClass("btn btn-sm btn-danger removeEditor")
+      .attr("data-editorid", response.user.id).click(function() { // anonymous function so I can use the $(this) context properly on the callback here. weird edge-case.
+        editorDeleteEventHandler($(this));
+      }));
+      $(".map-editor-list").append($editorToAdd);
+      return;
+
     } catch (err) {
       bootbox.alert({
         title: 'Wikimaps',

@@ -7,15 +7,19 @@ L.Map.addInitHook(function() {
   this.getContainer()._leaflet_map = this;
 });
 
+const markerFormUpdate = (marker) => {
+  $("form#markerInfo input[name='id']").val(marker._id);
+  $("form#markerInfo input[name='title']").val(marker._title);
+  $("form#markerInfo input[name='description']").val(marker._description);
+  $("form#markerInfo input[name='latitude']").val(marker._latlng.lat);
+  $("form#markerInfo input[name='longitude']").val(marker._latlng.lng);
+  $("form#markerInfo input[name='image']").val(marker._imageUrl);
+};
+
 const onMarkerClickHandler = (e) => {
   const _marker = e.target;
   _markerMapObject = _marker;
-  $("form#markerInfo input[name='id']").val(_marker._id);
-  $("form#markerInfo input[name='title']").val(_marker._title);
-  $("form#markerInfo input[name='description']").val(_marker._description);
-  $("form#markerInfo input[name='latitude']").val(_marker._latlng.lat);
-  $("form#markerInfo input[name='longitude']").val(_marker._latlng.lng);
-  $("form#markerInfo input[name='image']").val(_marker._imageUrl);
+  markerFormUpdate(_marker);
   $("#markerInfo").slideDown();
 };
 
@@ -54,6 +58,7 @@ const onMapClickHandler = (event) => {
   marker.on('click', onMarkerClickHandler);
   marker.on('contextmenu', onMarkerRightClickHandler);
   marker.bindTooltip(onMarkerHoverHandler, { offset: [0, -20] });
+  markerFormUpdate(marker);
   if (!$("#markerInfo").is(":visible")) {
     $("#markerInfo").slideDown();
   }

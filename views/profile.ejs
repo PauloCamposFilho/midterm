@@ -42,6 +42,10 @@
           </div>
           <!-- check whether user has any maps with favorites before building top maps table -->
           <% if (topMaps.map(map => map["favorites"]).filter(count => count > 0).length) { %>
+          <div class="row fs-3">
+            My Top Maps
+            <hr>
+          </div>
           <div class="row" id="user_maps">
             <table class="table table-sm table-hover">
               <thead>
@@ -68,6 +72,10 @@
           </div>
           <% } %>
           <% if (userMaps) { %>
+          <div class="row fs-3">
+            Maps I Edit
+            <hr>
+          </div>
           <div class="row" id="favorite_maps">
             <table class="table table-sm table-hover">
               <thead>

@@ -155,9 +155,11 @@ router.delete('/:id', async (req, res) => {
   }
   try {
     const mapInfo = await queries.getMapWithID(_mapId);
-    if (!mapInfo.user_id === _userId) { // Unauthorized. Not the map owner.
-      return res.status(401).send({ statusCode: 401, message: "Unauthorized. You don't own this map. "});
+    if (mapInfo.user_id !== _userId) { // Unauthorized. Not the map owner.
+      throw new Error("Unauthorized. You don't own this map.");
     }
+    console.log(mapInfo.user_id);
+    console.log(_userId);
     const deleteMapResponse = await queries.deleteMap(_mapId);
     return res.status(200).send({ statusCode: 200, message: "Map deleted successfuly." });
   } catch(err) {

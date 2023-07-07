@@ -11,7 +11,16 @@ const deleteMapClickHandler = async ($sender) => {
       centerVertical: true,
       callback: async function(result) {
         if (result) {
-          const deleteMap = await db_helpers.deleteMap(_mapId);
+          try {
+            const deleteMap = await db_helpers.deleteMap(_mapId);
+          } catch (err) {
+            bootbox.alert({
+              title: 'Wikimaps',
+              message: `There has been an error: ${err.message}`,
+              centerVertical: true
+            });
+            return;
+          }          
           $(`#user_maps tbody tr[data-mapId='${_mapId}']`).fadeOut(400, "linear", function() {
             $(`#user_maps tbody tr[data-mapId='${_mapId}']`).remove();
           });

@@ -21,6 +21,7 @@ router.get("/new", (req, res) => {
   templateVars.userOwnsMap = false;
   templateVars.userIsEditor = false;
   templateVars.mapInfo = undefined;
+  templateVars.userCanEdit = true;
   if (!templateVars.userId) { // user not logged in, shouldn't be here. Redirect to /
     return res.redirect("/");
   }

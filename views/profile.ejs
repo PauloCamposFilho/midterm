@@ -101,8 +101,8 @@
       $(document).ready(function() {
         $("#user_maps table tbody tr, #favorite_maps table tbody tr").on('click', function(e) {
           const _mapId = $(this).attr("data-mapId");
-          // window.location.href = `${window.location.origin}/maps/${_mapId}`;
-          window.open(`${window.location.origin}/maps/${_mapId}`, '_blank');
+          window.location.href = `${window.location.origin}/maps/${_mapId}`;
+          // window.open(`${window.location.origin}/maps/${_mapId}`, '_blank');
         });
       });
     </script>

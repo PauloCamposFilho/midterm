@@ -8,6 +8,7 @@
     <script src="../scripts/map-functions.js"></script>
     <script src="../scripts/editor-functions.js"></script>
     <script src="../scripts/favorite-functions.js"></script>
+    <script src="../scripts/my-maps-functions.js"></script>
     <script src="../scripts/javaScript.js"></script>
     <link rel="stylesheet" href="../styles/maps.css">
   </head>
@@ -38,8 +39,13 @@
                       <i class="fa fa-heart favorite-indicator
                       <% if (mapInfo.isUserFavorite) { %>
                       favorited
-                      <% } %>"></i>
+                      <% } %>"></i></span>
                     <span class="favorite-count"> &nbsp<%= mapInfo.favorite_count %> </span>
+                  <% } %>
+                  <% if (userOwnsMap) { %>
+                    <span>
+                      <button type="button" class="btn btn-sm btn-danger deleteMap" data-mapId="<%= mapId %>"><i class="fa-solid fa-trash"></i></button>
+                    </span>
                   <% } %>
                 </div>
               </div>

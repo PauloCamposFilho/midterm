@@ -20,6 +20,9 @@ const deleteMapClickHandler = async ($sender) => {
             message: `Map removed successfully.`,
             centerVertical: true
           });
+          if ($("#userCanEdit").length > 0) { // we're inside the map page... reload it!
+            location.reload();
+          }
         }
       }
     });

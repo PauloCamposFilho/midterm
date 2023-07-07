@@ -4,8 +4,9 @@ const favoriteClickHandler = async ($sender) => {
   if ($sender.find("i").hasClass("favorited")) { // user has favorited this map.
     try {
       const deleteFavoriteMap = await db_helpers.removeFavoriteMap(_mapId);
-      bootbox.dialog({
-        message: 'Thank you for your support! Our map creators appreciate it.',
+      bootbox.alert({
+        title: 'Wikimaps',
+        message: 'No worries! Be seeing you.',
         closeButton: false,
         backdrop: true,
         centerVertical: true
@@ -23,7 +24,8 @@ const favoriteClickHandler = async ($sender) => {
   } else { // adding a new favorite
     try {
       const addFavoriteMap = await db_helpers.addFavoriteMap(_mapId);
-      bootbox.dialog({
+      bootbox.alert({
+        title: 'Wikimaps',
         message: 'Thank you for your support! Our map creators appreciate it.',
         closeButton: false,
         backdrop: true,

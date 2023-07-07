@@ -33,7 +33,7 @@
                   />
                 </div>
                 <div class="row-xl col-md-2 favorite-container fs-4">
-                  <% if (mapInfo && mapInfo.favorite_count > 0) { %>
+                  <% if (mapInfo && mapInfo.favorite_count >= 0) { %>
                     <span><button type="button" class="btn btn-sm btn-info-outline favoriteToggle" data-mapId="<%= mapId %>">
                       <i class="fa fa-heart favorite-indicator
                       <% if (mapInfo.isUserFavorite) { %>
